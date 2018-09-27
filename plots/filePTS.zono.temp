@@ -1,0 +1,28 @@
+####################################################################
+# 		   Read, PTS: "Parameters to set"
+####################################################################
+#Field--------------------------------------------------------------	
+Fields:		rotu	divu	rotf	divf
+ArrayT1		0	48
+ArrayT2		0	0
+ArrayT3		0	0
+ArrayT4		0	0
+AST1		8			#If==0 arrayT1 not used; Othwise it defines numbers of time step to average. 
+AST2		0			#If==0 arrayT1 not used; Othwise it defines numbers of time step to average. 
+AST3		0			#If==0 arrayT1 not used; Othwise it defines numbers of time step to average. 
+AST4		0			#If==0 arrayT1 not used; Othwise it defines numbers of time step to average. 
+dim		1			#for adimensionalisation 1/ Deusobio et al.(2014) 2/ Galperin et al. (2014)
+####################################################################
+# 		  	  PLANETARY PARAMETERS
+####################################################################
+omega_sat	0.000164		# Rotation rate in s-1
+R_sat		58232000		# En m
+SatDay_s	38052			# Day length in second
+Ck		5.			# Constant of ER(n) = Ck epsilon^2/3 n^-5/3 ;  [Ck] = non-dim
+epsilon		0.0000015 		# [epsilon] = m^2/s^3
+Cz		0.5			# Constant of EZ(n) = Cz beta^2 n^-5 ;  [Cz] = non-dim
+H-atm		59000			# Hauteur l'atmosphere de Saturne. [H] = m
+N		0.01			# Frequence typique de Brunt–Väisälä. [N] = s-1
+epsilon_f	0.000002959		# Taux d injection d energie << f.u >_s>_T en m^2.s-3 --> issu de epsilon-Eval.py
+n_f		56.			# Indice d injection d energie par forcage de Taylor-Green
+tau_f		4756.50			# temps d appel de la physique en seconde.
