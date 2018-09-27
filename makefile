@@ -1,5 +1,5 @@
 netcdfpath=/planeto/emlmd/netcdf64-4.0.1_ifort
-spherepackpath=/u/scabanes/planeto/SPECTRA/spherepack3.2
+spherepackpath=./spherepack3.2
 FC=ifort
 
 
