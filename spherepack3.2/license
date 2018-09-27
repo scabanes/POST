@@ -1,0 +1,441 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
+  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" version="XHTML+RDFa 1.0" dir="ltr">
+
+<head profile="http://www.w3.org/1999/xhtml/vocab">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" href="https://www2.cisl.ucar.edu/sites/default/themes/troposphere/favicon.ico" type="image/vnd.microsoft.icon" />
+<link rel="shortlink" href="/node/1311" />
+<link rel="canonical" href="/resources/legacy/spherepack/license" />
+<meta name="Generator" content="Drupal 7 (http://drupal.org)" />
+  <title>SPHEREPACK (the &quot;Software&quot;) License | Computational Information Systems Laboratory</title>
+  <link type="text/css" rel="stylesheet" href="https://www2.cisl.ucar.edu/sites/default/files/css/css_xE-rWrJf-fncB6ztZfd2huxqgxu4WO-qwma6Xer30m4.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www2.cisl.ucar.edu/sites/default/files/css/css_6mMm47qInwP--b4PnZTw3kf5lTf5q7XxBnUCDsrFQpU.css" media="screen" />
+<style type="text/css" media="print">
+<!--/*--><![CDATA[/*><!--*/
+#sb-container{position:relative;}#sb-overlay{display:none;}#sb-wrapper{position:relative;top:0;left:0;}#sb-loading{display:none;}
+
+/*]]>*/-->
+</style>
+<link type="text/css" rel="stylesheet" href="https://www2.cisl.ucar.edu/sites/default/files/css/css_wPbmLztdlRaW7f1Egxda_8GtH51JWT-1qchzEQKEJio.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www2.cisl.ucar.edu/sites/default/files/css/css_faHJjd4xOgnPFs1S4sQx2GsdEGASMPXegY2e2rNsVZU.css" media="all" />
+<link type="text/css" rel="stylesheet" href="" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www2.cisl.ucar.edu/sites/default/files/css/css_9VtlfAilAjTppVluYyF4jcCgC3Kl6m2An5Pz_DEOIwc.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www2.cisl.ucar.edu/sites/default/files/css/css_B20uH-vov2j95LtJKfLPqeJGsw4mylv8pRBPLGPp-no.css" media="print" />
+
+<!--[if IE]>
+<link type="text/css" rel="stylesheet" href="https://www2.cisl.ucar.edu/sites/default/themes/troposphere/css/ie.css?pfoyg5" media="all" />
+<![endif]-->
+
+<!--[if IE 6]>
+<link type="text/css" rel="stylesheet" href="https://www2.cisl.ucar.edu/sites/default/themes/troposphere/css/ie6.css?pfoyg5" media="all" />
+<![endif]-->
+
+<!--[if IE 7]>
+<link type="text/css" rel="stylesheet" href="https://www2.cisl.ucar.edu/sites/default/themes/troposphere/css/ie7.css?pfoyg5" media="all" />
+<![endif]-->
+  <script type="text/javascript" src="https://www2.cisl.ucar.edu/sites/default/files/js/js_v7z_ueNi9EIrZXPI8So7AkuzyXuKekr2jbdDptsM5Oc.js"></script>
+<script type="text/javascript" src="https://www2.cisl.ucar.edu/sites/default/files/js/js_wBKcJUtv2tBuMoJTRayP6QQQfXXjIELqAzuK5OaPQ3Y.js"></script>
+<script type="text/javascript" src="https://www2.cisl.ucar.edu/sites/default/files/js/js_f_6-OzlFXjayKlsU5sJKLwjz7LFQvdIZDm-Mt6jKwyM.js"></script>
+<script type="text/javascript" src="https://www2.cisl.ucar.edu/sites/default/files/js/js_gPqjYq7fqdMzw8-29XWQIVoDSWTmZCGy9OqaHppNxuQ.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://www.google-analytics.com/analytics.js","ga");ga("create", "UA-332815-25", {"cookieDomain":"auto"});ga("send", "pageview");
+//--><!]]>
+</script>
+<script type="text/javascript" src="https://www2.cisl.ucar.edu/sites/default/files/js/js_ZxgiY_hLe37tS2x4OLfl0ivRyI_9yEJY0M6vxub3dJI.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+
+          Shadowbox.path = "/sites/default/libraries/shadowbox/";
+        
+//--><!]]>
+</script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"troposphere","theme_token":"UZaIUzElhyCx3E-E5GLUYI2GNyKDcOqiE4dBI0Ra8E8","js":{"sites\/default\/modules\/contrib\/google_cse\/google_cse_results.js":1,"sites\/default\/modules\/contrib\/jquery_update\/replace\/jquery\/1.7\/jquery.min.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"sites\/default\/libraries\/shadowbox\/shadowbox.js":1,"sites\/default\/modules\/contrib\/shadowbox\/shadowbox_auto.js":1,"sites\/all\/modules\/nice_menus\/js\/jquery.bgiframe.js":1,"sites\/all\/modules\/nice_menus\/js\/jquery.hoverIntent.js":1,"sites\/all\/modules\/nice_menus\/js\/superfish.js":1,"sites\/all\/modules\/nice_menus\/js\/nice_menus.js":1,"sites\/default\/modules\/contrib\/google_cse\/google_cse.js":1,"sites\/all\/modules\/google_analytics\/googleanalytics.js":1,"0":1,"sites\/default\/themes\/atmos\/js\/site.js":1,"sites\/default\/themes\/atmos\/js\/atmos_imgcaption.js":1,"sites\/default\/themes\/troposphere\/js\/script.js":1,"1":1},"css":{"modules\/system\/system.base.css":1,"modules\/system\/system.menus.css":1,"modules\/system\/system.messages.css":1,"modules\/system\/system.theme.css":1,"sites\/default\/libraries\/shadowbox\/shadowbox.css":1,"0":1,"modules\/aggregator\/aggregator.css":1,"modules\/book\/book.css":1,"sites\/all\/modules\/calendar\/css\/calendar_multiday.css":1,"sites\/all\/modules\/date\/date_api\/date.css":1,"sites\/all\/modules\/date\/date_popup\/themes\/datepicker.1.7.css":1,"sites\/all\/modules\/date\/date_repeat_field\/date_repeat_field.css":1,"modules\/field\/theme\/field.css":1,"sites\/default\/modules\/contrib\/google_cse\/google_cse.css":1,"modules\/node\/node.css":1,"modules\/search\/search.css":1,"modules\/user\/user.css":1,"sites\/all\/modules\/views\/css\/views.css":1,"sites\/default\/modules\/contrib\/ckeditor\/css\/ckeditor.css":1,"sites\/default\/modules\/contrib\/entity_embed\/css\/entity_embed.css":1,"sites\/all\/modules\/ctools\/css\/ctools.css":1,"public:\/\/geshi\/geshifilter-languages.css":1,"sites\/default\/modules\/contrib\/geshifilter\/geshifilter.css":1,"sites\/all\/modules\/nice_menus\/css\/nice_menus.css":1,"sites\/default\/themes\/atmos\/css\/nice-menus.css":1,"sites\/default\/themes\/atmos\/css\/fonts.css":1,"sites\/default\/themes\/atmos\/css\/layout.css":1,"sites\/default\/themes\/atmos\/css\/nice_menus_default.css":1,"sites\/default\/themes\/atmos\/css\/style.css":1,"sites\/default\/themes\/troposphere\/css\/colors.css":1,"sites\/default\/themes\/atmos\/css\/atmos_imgcaption.css":1,"sites\/default\/themes\/atmos\/css\/atmos_tinymce.css":1,"sites\/default\/themes\/atmos\/css\/custom.css":1,"sites\/default\/themes\/troposphere\/css\/override.css":1,"sites\/default\/themes\/atmos\/css\/print.css":1,"sites\/default\/themes\/troposphere\/css\/ie.css":1,"sites\/default\/themes\/troposphere\/css\/ie6.css":1,"sites\/default\/themes\/troposphere\/css\/ie7.css":1}},"googleCSE":{"cx":"016712339613867830978:igijo92w2zo","language":"","resultsWidth":600,"domain":"cse.google.com","showWaterMark":1},"shadowbox":{"animate":1,"animateFade":1,"animSequence":"wh","auto_enable_all_images":1,"auto_gallery":0,"autoplayMovies":true,"continuous":0,"counterLimit":"10","counterType":"default","displayCounter":1,"displayNav":1,"enableKeys":1,"fadeDuration":"0.35","handleOversize":"resize","handleUnsupported":"link","initialHeight":160,"initialWidth":320,"language":"en","modal":false,"overlayColor":"#000","overlayOpacity":"0.85","resizeDuration":"0.35","showMovieControls":1,"slideshowDelay":"0","viewportPadding":20,"useSizzle":0},"nice_menus_options":{"delay":"200","speed":"fast"},"googleanalytics":{"trackOutbound":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc(x|m)?|dot(x|m)?|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt(x|m)?|pot(x|m)?|pps(x|m)?|ppam|sld(x|m)?|thmx|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls(x|m|b)?|xlt(x|m)|xlam|xml|z|zip"},"urlIsAjaxTrusted":{"\/\/cse.google.com\/cse":true}});
+//--><!]]>
+</script>
+  <script type="text/javascript">
+  (function() {
+    var config = {
+      kitId: 'rpo4dvf'
+    };
+    var d = false;
+    var tk = document.createElement('script');
+    tk.src = '//use.typekit.net/' + config.kitId + '.js';
+    tk.type = 'text/javascript';
+    tk.async = 'true';
+    tk.onload = tk.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (d || rs && rs != 'complete' && rs != 'loaded') return;
+      d = true;
+      try { Typekit.load(config); } catch (e) {}
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(tk, s);
+  })();
+</script>
+</head>
+<body class="html not-front not-logged-in one-sidebar sidebar-first page-node page-node- page-node-1311 node-type-book cisl documentation _TID" >
+  <div id="skip-link">
+    <a href="#main-content" class="element-invisible element-focusable">Skip to main content</a>
+  </div>
+    <!-- TOP NAV -->
+<div id="header-wrap">
+    <div id="navigation">
+        <div class="align-center-wrapper">
+
+            <div class="region region-navigation">
+    <div id="block-nice-menus-1" class="block block-nice-menus">
+
+    
+  <div class="content">
+    <ul class="nice-menu nice-menu-down nice-menu-main-menu" id="nice-menu-1"><li class="menu-5537 menuparent  menu-path-node-1072 first odd "><a href="/software/software" title="">Software</a><ul><li class="menu-5554 menu-path-svaporucaredu- first odd "><a href="https://www.vapor.ucar.edu/" title="">Vapor</a></li>
+<li class="menu-5555 menu-path-nclucaredu-  even "><a href="http://www.ncl.ucar.edu/" title="">NCL</a></li>
+<li class="menu-5556 menu-path-imageucaredu-dares-dart-  odd "><a href="http://www.image.ucar.edu/DAReS/DART/" title="">DART</a></li>
+<li class="menu-5557 menu-path-pynglucaredu-  even "><a href="http://www.pyngl.ucar.edu/" title="">PyNGL</a></li>
+<li class="menu-5550 menu-path-node-1146  odd "><a href="/resources/legacy/fft5">FFTPACK5</a></li>
+<li class="menu-5549 menu-path-node-1294  even "><a href="/resources/legacy/fishpack">FISHPACK</a></li>
+<li class="menu-5552 menu-path-node-1288  odd "><a href="/resources/legacy/fishpack90">FISHPACK90</a></li>
+<li class="menu-5551 menu-path-node-1300  even "><a href="/resources/legacy/mudpack">MUDPACK</a></li>
+<li class="menu-5553 menu-path-node-1306  odd last"><a href="/resources/legacy/spherepack">SPHEREPACK</a></li>
+</ul></li>
+<li class="menu-5538 menuparent  menu-path-node-722  even "><a href="/cisl-computing" title="">Data Portals</a><ul><li class="menu-6687 menu-path-node-3815 first odd "><a href="/dash">DASH</a></li>
+<li class="menu-5558 menu-path-searthsystemgridorg-  even "><a href="https://www.earthsystemgrid.org/" title="">Climate Data Gateway</a></li>
+<li class="menu-5559 menu-path-rdaucaredu-  odd last"><a href="http://rda.ucar.edu/" title="">Research Data Archive</a></li>
+</ul></li>
+<li class="menu-5515 menuparent  menu-path-node-1678  odd "><a href="/user-support" title="">User Support</a><ul><li class="menu-5516 menu-path-node-633 first odd "><a href="/user-support/getting-help" title="">Help &amp; Consulting</a></li>
+<li class="menu-5517 menu-path-node-568  even "><a href="/user-support/allocations" title="">Allocations</a></li>
+<li class="menu-5518 menu-path-node-1178  odd "><a href="/user-support/cisl-resource-status" title="">Resource Status</a></li>
+<li class="menu-5519 menu-path-node-2155  even "><a href="/user-support/system-documentation">System Documentation</a></li>
+<li class="menu-5520 menu-path-node-2125  odd "><a href="/user-support/advanced-visualization-support">Visualizations</a></li>
+<li class="menu-5521 menu-path-node-569  even "><a href="/user-support/training" title="">Training</a></li>
+<li class="menu-5522 menu-path-node-1175  odd last"><a href="/user-support/systems-accounting-manager">Systems Accounting Manager</a></li>
+</ul></li>
+<li class="menu-5523 menuparent  menu-path-node-1228  even "><a href="/resources/resources-overview">Resources</a><ul><li class="menu-5524 menu-path-node-3344 first odd "><a href="/resources/computational-systems/cheyenne/cheyenne">High Performance Computing</a></li>
+<li class="menu-5525 menu-path-node-1681  even "><a href="/resources/storage-and-file-systems/glade-file-spaces">File Systems</a></li>
+<li class="menu-5527 menu-path-node-1773  odd "><a href="/resources/computational-systems/geyser-and-caldera">Data Analysis &amp; Visualization</a></li>
+<li class="menu-5528 menu-path-node-1195  even last"><a href="/vislab">VisLab</a></li>
+</ul></li>
+<li class="menu-5529 menuparent  menu-path-node-750  odd last"><a href="/org/about" title="">About Us</a><ul><li class="menu-5530 menu-path-node-2185 first odd "><a href="/our-campuses" title="">Our Campuses</a></li>
+<li class="menu-5531 menu-path-node-1327  even "><a href="/dir/cisl-org-chart">Organization Chart</a></li>
+<li class="menu-5532 menu-path-s2cislucaredu-sites-default-files-cisl-strategic-plan-2015-2019pdf  odd "><a href="https://www2.cisl.ucar.edu/sites/default/files/CISL_Strategic_Plan_2015-2019.pdf" title="">Strategic Plan</a></li>
+<li class="menu-5533 menu-path-snarucaredu-2017-cisl-2017-cisl-annual-report  even "><a href="https://nar.ucar.edu/2017/cisl/2017-cisl-annual-report" title="">Annual Report</a></li>
+<li class="menu-5534 menu-path-openskylibraryucaredu-  odd "><a href="http://opensky.library.ucar.edu/" title="">OpenSky Publications Database</a></li>
+<li class="menu-5580 menu-path-node-1170  even "><a href="/outreach" title="">Outreach</a></li>
+<li class="menu-5628 menu-path-node-5303  odd "><a href="/visitor-and-internship-programs">Visitor and Internship Programs</a></li>
+<li class="menu-5536 menu-path-ucarcareerssilkroadcom-  even last"><a href="http://ucarcareers.silkroad.com/" title="">Careers</a></li>
+</ul></li>
+</ul>
+  </div>
+</div>
+<div id="block-google-cse-google-cse" class="block block-google-cse">
+
+    <h2>Search</h2>
+  
+  <div class="content">
+    
+
+  <form action="//cse.google.com/cse" method="get" id="google-cse-results-searchbox-form" accept-charset="UTF-8"><div><input type="hidden" name="cx" value="016712339613867830978:igijo92w2zo" />
+<input type="hidden" name="cof" value="FORID:0" />
+<div class="form-item form-type-textfield form-item-query">
+  <input type="text" id="edit-query" name="query" value="" size="40" maxlength="128" class="form-text" />
+</div>
+<input type="submit" id="edit-sa" name="op" value="Search" class="form-submit" /><input type="hidden" name="safe" value="high" />
+<input type="hidden" name="form_build_id" value="form-x7xUWgXlc3RYv-wH2GxDbEFyLHyGT8eM3QsLCzzquoY" />
+<input type="hidden" name="form_id" value="google_cse_results_searchbox_form" />
+</div></form>
+<div id="google-cse-results">
+  <gcse:searchbox-only gname="google_cse"></gcse:searchbox-only>  <noscript>
+    You must enable JavaScript to view the search results.  </noscript>
+</div>
+  </div>
+</div>
+  </div>
+        </div>
+    </div><!-- end navbar -->
+
+    <div id="header" class="clear-block>">
+        <div class="section clearfix align-center-wrapper">
+            <div id="header-sub-nav"></div>
+
+                        <div id="logo-floater">
+                  <a href="/"
+                     title="Home" rel="home" id="logo">
+                      <img src="https://www2.cisl.ucar.edu/sites/default/themes/troposphere/images/CISL-new-logo.png"
+                           alt="Home"/>
+                  </a>
+              </div>
+          
+                        <div id="name-and-slogan">
+
+                                                          <div id="site-name" class="element-invisible">
+                            <strong>
+                                <a href="/"
+                                   title="Home" rel="home"><span>Computational Information Systems Laboratory</span></a>
+                            </strong>
+                        </div>
+                                  
+                <div class="nsf-logo"><img src="/sites/default/themes/troposphere/images/nsf.png"/></div><!-- .slogan -->
+              </div> <!-- /#name-and-slogan -->
+          
+            <div class="region region-header">
+    <div id="block-menu-menu-sub-menu" class="block block-menu">
+
+    <h2 class="element-invisible">Sub Menu</h2>
+  
+  <div class="content">
+    <ul class="menu clearfix"><li class="first leaf"><a href="http://dailyb.cisl.ucar.edu/" title="">Daily Bulletin</a></li>
+<li class="leaf"><a href="/user-support/cisl-resource-status" title="">Resource Status</a></li>
+<li class="leaf"><a href="/newsroom" title="">Newsroom</a></li>
+<li class="last leaf"><a href="/events">Events</a></li>
+</ul>  </div>
+</div>
+  </div>
+        </div> <!-- /.section -->
+    </div> <!-- /#header -->
+</div> <!-- /#header-wrap -->
+
+
+
+<div id="wrap">
+    <div id="container" class="clear-block">
+
+        <div id="center-wrapper" class="clear-block">
+
+          
+                        <div id="leftcol" class="sidebar">
+                  <div class="region region-sidebar-first">
+    <div id="block-menu-menu-resources" class="block block-menu">
+
+    <h2>Resources</h2>
+  
+  <div class="content">
+    <ul class="menu clearfix"><li class="first leaf"><a href="/resources/resources-overview" title="">Resources overview</a></li>
+<li class="collapsed"><a href="/resources/computational-systems/cheyenne/cheyenne" title="">Cheyenne</a></li>
+<li class="collapsed"><a href="/resources/computational-systems/geyser-and-caldera" title="">Geyser and Caldera</a></li>
+<li class="leaf"><a href="/resources/computational-systems/casper" title="">Casper</a></li>
+<li class="collapsed"><a href="/resources/cmip-analysis-platform" title="">CMIP Analysis Platform</a></li>
+<li class="collapsed"><a href="/resources/storage-and-file-systems/glade-file-spaces" title="">GLADE File Spaces</a></li>
+<li class="collapsed"><a href="/resources/storage-and-file-systems/hpss" title="">HPSS</a></li>
+<li class="collapsed"><a href="/software/software" title="">Software</a></li>
+<li class="collapsed"><a href="/data-portals/research-data-archive" title="">Research Data Archive</a></li>
+<li class="leaf"><a href="/resources/storage-and-file-systems/using-data-access-nodes" title="">Using data-access nodes</a></li>
+<li class="last leaf"><a href="/resources/storage-and-file-systems/data-transfers-and-sharing" title="">Data transfers and sharing </a></li>
+</ul>  </div>
+</div>
+<div id="block-menu-menu-getting-started" class="block block-menu">
+
+    <h2>Getting Started</h2>
+  
+  <div class="content">
+    <ul class="menu clearfix"><li class="first leaf"><a href="/user-support/new-user-orientation" title="">New user orientation</a></li>
+<li class="leaf"><a href="/user-support/cisl-best-practices" title="">Best practices</a></li>
+<li class="collapsed"><a href="/user-support/allocations" title="">Allocations</a></li>
+<li class="collapsed"><a href="/user-support/managing-allocations-and-charges" title="">Managing allocations and charges</a></li>
+<li class="leaf"><a href="/user-support/user-accounts-and-access" title="">User accounts and access</a></li>
+<li class="collapsed"><a href="/user-support/authentication-and-security" title="">Authentication and security</a></li>
+<li class="leaf"><a href="/user-support/user-responsibilities" title="">User responsibilities</a></li>
+<li class="last leaf"><a href="/user-support/acknowledging-ncarcisl" title="">Acknowledging NCAR/CISL</a></li>
+</ul>  </div>
+</div>
+<div id="block-bean-cisl-user-support-horizontal-b" class="block block-bean">
+
+    <h2>Help Desk</h2>
+  
+  <div class="content">
+    <div class="entity entity-bean bean-basic-bean clearfix">
+
+  <div class="content">
+    <div class="field field-name-field-bean-body field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><p style="font-size: 14px;"><a href="/cisl-status">Resource Status</a></p>
+<p style="font-size: 14px;"><img src="/sites/default/files/phone.gif" border="0" alt="phone" width="25" height="25" /> Call 303-497-2400</p>
+<p style="font-size: 14px;"><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#99;&#105;&#115;&#108;&#104;&#101;&#108;&#112;&#64;&#117;&#99;&#97;&#114;&#46;&#101;&#100;&#117;"><img src="/sites/default/files/email.gif" border="0" width="25" height="25" /> Send an email</a></p>
+<p style="font-size: 14px;"><a href="http://cislhelp.ucar.edu/" target="_blank"><img src="/sites/default/files/ticket.gif" border="0" alt="ticket" width="25" height="25" /> Submit a help ticket</a></p>
+<p style="font-size: 14px;"><a href="/docs/uss#csg"><img src="/sites/default/files/walk.gif" border="0" width="25" height="25" /> Walk-in: ML 1B Suite 55</a></p></div></div></div>  </div>
+</div>
+  </div>
+</div>
+  </div>
+              </div> <!-- /#sidebar-first -->
+          
+            <div id="center">
+                <div id="squeeze">
+                    <div class="right-corner">
+                        <div class="left-corner">
+
+                                                    <div id="tabs-wrapper" class="clear-block"></div>                                                    
+                            <!-- Some content types intentinally strip $node->title in the node-CONTENT_TYPE.tpl.php file.
+                            Views and panels are not content types, so no $node->type, but do have $title.  Check for that first.
+                            If there is a $node->type, check to see if $node->title exists -->
+                          <div id="content-head"><div class="breadcrumbs"><h2 class="element-invisible">You are here</h2><div class="breadcrumb"><a href="/">Home</a></div></div><h1 class="title with-tabs">SPHEREPACK (the &quot;Software&quot;) License</h1></div>
+
+                            <div id="main-content" class="clear-block">
+
+                                <div class="region region-content">
+    <div id="block-system-main" class="block block-system">
+
+    
+  <div class="content">
+    <div id="node-1311" class="node node-book node-full clearfix">
+
+      
+  
+  <div class="content clearfix">
+    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><div class="mceTmpl mceTmpl_inline">
+<div class="mceTmpl_page_nav_tab">
+<p class="mceTmpl_page_nav_tab_inactive"><a href="/resources/legacy/spherepack" title="Overview">Overview</a></p>
+</div>
+</div>
+
+<div class="mceTmpl mceTmpl_inline">
+<div class="mceTmpl_page_nav_tab">
+<p class="mceTmpl_page_nav_tab_inactive"><a href="/resources/legacy/spherepack/documentation" title="Documentation">Documentation</a></p>
+</div>
+</div>
+
+<div class="mceTmpl mceTmpl_inline">
+<div class="mceTmpl_page_nav_tab">
+<p class="mceTmpl_page_nav_tab_active"><a href="/resources/legacy/spherepack/download" title="Download">Download</a></p>
+</div>
+</div>
+
+<div class="mceTmpl mceTmpl_inline">
+<div class="mceTmpl_page_nav_tab">
+<p class="mceTmpl_page_nav_tab_inactive"><a href="/resources/legacy/spherepack/assistance" title="Assistance">Assistance</a></p>
+</div>
+</div>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>PLEASE READ THIS SOFTWARE LICENSE ("LICENSE") CAREFULLY. INDICATE YOUR ACCEPTANCE OF THESE TERMS BY CHECKING THE "I have read and hereby accept the SPHEREPACK License Agreement" ON THE REGISTRATION PAGE. IF YOU DO NOT AGREE TO ALL OF THE TERMS OF THIS LICENSE AND YOU DO NOT CHECK THE "I ACCEPT" BOX, THE INSTALLATION PROCESS WILL NOT CONTINUE.</p>
+
+<p>Copyright © 2004 the University Corporation for Atmospheric Research ("UCAR"). All rights reserved. Developed by NCAR's Computational and Information Systems Laboratory, UCAR, <a href="https://www2.cisl.ucar.edu/">www2.cisl.ucar.edu.</a></p>
+
+<p>Redistribution and use of the Software in source and binary forms, with or without modification, is permitted provided that the following conditions are met:</p>
+
+<ul>
+	<li>Neither the names of NCAR's Computational and Information Systems Laboratory, the University Corporation for Atmospheric Research, nor the names of its sponsors or contributors may be used to endorse or promote products derived from this Software without specific prior written permission.</li>
+	<li>Redistributions of source code must retain the above copyright notices, this list of conditions, and the disclaimer below.</li>
+	<li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the disclaimer below in the documentation and/or other materials provided with the distribution.</li>
+</ul>
+
+<p>THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE SOFTWARE.</p>
+
+<hr />
+<p>SPHEREPACK is a product of the Computational &amp; Information Systems Laboratory at the National Center for Atmospheric Research (NCAR)</p>
+</div></div></div>  </div>
+
+  
+  
+</div>
+  </div>
+</div>
+  </div>
+                            </div>
+                            <div class="feed_icons">
+                                                          </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- /.left-corner, /.right-corner, /#squeeze, /#center -->
+
+          
+          
+        </div> <!-- /center-wrapper -->
+
+      
+      
+                <div class="footernav">
+              <div class="region region-footer">
+    <div id="block-bean-site-footer" class="block block-bean">
+
+    
+  <div class="content">
+    <div class="entity entity-bean bean-basic-bean clearfix">
+
+  <div class="content">
+    <div class="field field-name-field-bean-body field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><div id="sitemap_wrapper">
+<div class="one-column">
+<ul class="social-media"><li><a class="facebook" href="https://www.facebook.com/AtmosNews">Facebook</a></li>
+	<li><a class="twitter" href="https://twitter.com/NCAR_CISL">Twitter</a></li>
+</ul><h3>Contact Us</h3>
+
+<ul><li><a href="directions">Directions</a></li>
+	<li><a href="https://staff.ucar.edu">Staff Directory</a></li>
+</ul></div>
+
+<div class="one-column">
+<h3>CISL Organization</h3>
+
+<ul><li><a href="/osd/">Operations and Services</a></li>
+	<li><a href="http://www.cisl.ucar.edu/tdd/">Technology Development</a></li>
+	<li><a href="https://www2.cisl.ucar.edu/image">Institute for Mathematics Applied to Geosciences</a></li>
+	<li><a href="/chap">CISL High performance computing Advisory Panel</a></li>
+</ul></div>
+
+<div class="one-column">
+<h3>For Staff</h3>
+
+<ul><li><a href="/internal/cisl-management-and-administration">Management/Administrative Information</a></li>
+	<li><a href="/services/networking">Networking</a></li>
+	<li><a href="/wsst">Workstation Support</a></li>
+	<li><a href="/outreach/support">Outreach Services</a></li>
+	<li><a href="/internal/admin">Administration</a></li>
+</ul></div>
+</div>
+</div></div></div>  </div>
+</div>
+  </div>
+</div>
+<div id="block-bean-login-bean" class="block block-bean">
+
+    
+  <div class="content">
+    <div class="entity entity-bean bean-basic-bean clearfix">
+
+  <div class="content">
+    <div class="field field-name-field-bean-body field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><div align="center" id="loginlink"><a href="/user">Login</a></div>
+</div></div></div>  </div>
+</div>
+  </div>
+</div>
+<div id="block-block-1" class="block block-block">
+
+    
+  <div class="content">
+    <!-- OrgNavFooter Script -->
+<script>
+    // CUSTOM VARIABLES
+    var contactLink = "/contact";     // enter your Contact/Feedback link or mailto: link
+    var hideOrgNav = false;        // hide the entire OrgNav from view
+    var hideFooter = false;          // hide the entire OrgFooter from view
+    var hideNSF = false;               // hide the NSF disclaimer
+    var footerColor = '#666';       // hex color of the footer font including the #
+
+    // DO NOT EDIT BELOW THIS POINT
+document.write("<scr"+"ipt src='https://orgnav.ucar.edu/orgnav.js' type='text/javascript'></scr"+"ipt>");
+
+</script>
+<noscript><iframe frameborder="0" width="100%" src="https://orgnav.ucar.edu/noscript.html"></iframe></noscript>
+<!-- END OrgNavFooter Script -->  </div>
+</div>
+  </div>
+          </div> <!-- /#footernav -->
+      
+    </div><!-- /#container -->
+</div> <!-- /#wrap -->
+<!-- /layout -->
+
+  <script type="text/javascript" src="https://www2.cisl.ucar.edu/sites/default/files/js/js_KpbuXFbunBaGjtuvRkOuscNXQlFkv4Fjgh1fiknomL8.js"></script>
+  <script type="text/javascript">
+    setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0022/4903.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </script>
+</body>
+</html>

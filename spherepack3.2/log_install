@@ -1,0 +1,69 @@
+mkdir -p ./lib
+mkdir -p ./objs
+( cd ./src; gmake clean; gmake )
+gmake[1]: entrant dans le répertoire « /planeto/scabanes/SPECTRA/spherepack3.2/src »
+rm -f ../lib/libspherepack.a ../objs/advec.o ../objs/alf.o ../objs/divec.o ../objs/dives.o ../objs/divgc.o ../objs/divgs.o ../objs/gaqd.o ../objs/geo2math.o ../objs/gradec.o ../objs/grades.o ../objs/gradgc.o ../objs/gradgs.o ../objs/helmsph.o ../objs/hrfft.o ../objs/idivec.o ../objs/idives.o ../objs/idivgc.o ../objs/idivgs.o ../objs/idvtec.o ../objs/idvtes.o ../objs/idvtgc.o ../objs/idvtgs.o ../objs/igradec.o ../objs/igrades.o ../objs/igradgc.o ../objs/igradgs.o ../objs/ihgeod.o ../objs/isfvpec.o ../objs/isfvpes.o ../objs/isfvpgc.o ../objs/isfvpgs.o ../objs/islapec.o ../objs/islapes.o ../objs/islapgc.o ../objs/islapgs.o ../objs/ivlapec.o ../objs/ivlapes.o ../objs/ivlapgc.o ../objs/ivlapgs.o ../objs/ivrtec.o ../objs/ivrtes.o ../objs/ivrtgc.o ../objs/ivrtgs.o ../objs/lfim.o ../objs/lfin.o ../objs/lfp.o ../objs/lfpt.o ../objs/sfvpec.o ../objs/sfvpes.o ../objs/sfvpgc.o ../objs/sfvpgs.o ../objs/shaec.o ../objs/shaes.o ../objs/shagc.o ../objs/shags.o ../objs/shallow.o ../objs/shigc.o ../objs/shigs.o ../objs/shpe.o ../objs/shpg.o ../objs/shsec.o ../objs/shses.o ../objs/shsgc.o ../objs/shsgs.o ../objs/slapec.o ../objs/slapes.o ../objs/slapgc.o ../objs/slapgs.o ../objs/sphcom.o ../objs/sshifte.o ../objs/trssph.o ../objs/trvsph.o ../objs/vhaec.o ../objs/vhaes.o ../objs/vhagc.o ../objs/vhags.o ../objs/vhsec.o ../objs/vhses.o ../objs/vhsgc.o ../objs/vhsgs.o ../objs/visequ.o ../objs/visgau.o ../objs/visgeo.o ../objs/vlapec.o ../objs/vlapes.o ../objs/vlapgc.o ../objs/vlapgs.o ../objs/vrtec.o ../objs/vrtes.o ../objs/vrtgc.o ../objs/vrtgs.o ../objs/vshifte.o ../objs/vsurf.o ../objs/vtsec.o ../objs/vtses.o ../objs/vtsgc.o ../objs/vtsgs.o 
+gmake[1]: quittant le répertoire « /planeto/scabanes/SPECTRA/spherepack3.2/src »
+gmake[1]: entrant dans le répertoire « /planeto/scabanes/SPECTRA/spherepack3.2/src »
+ifort -r8 -module ../lib -I../lib -c advec.f -o ../objs/advec.o
+ifort -r8 -module ../lib -I../lib -c alf.f -o ../objs/alf.o
+ifort -r8 -module ../lib -I../lib -c divec.f -o ../objs/divec.o
+ifort -r8 -module ../lib -I../lib -c dives.f -o ../objs/dives.o
+ifort -r8 -module ../lib -I../lib -c divgc.f -o ../objs/divgc.o
+ifort -r8 -module ../lib -I../lib -c divgs.f -o ../objs/divgs.o
+ifort -r8 -module ../lib -I../lib -c gaqd.f -o ../objs/gaqd.o
+ifort -r8 -module ../lib -I../lib -c geo2math.f -o ../objs/geo2math.o
+ifort -r8 -module ../lib -I../lib -c gradec.f -o ../objs/gradec.o
+ifort -r8 -module ../lib -I../lib -c grades.f -o ../objs/grades.o
+ifort -r8 -module ../lib -I../lib -c gradgc.f -o ../objs/gradgc.o
+ifort -r8 -module ../lib -I../lib -c gradgs.f -o ../objs/gradgs.o
+ifort -r8 -module ../lib -I../lib -c helmsph.f -o ../objs/helmsph.o
+ifort -r8 -module ../lib -I../lib -c hrfft.f -o ../objs/hrfft.o
+ifort -r8 -module ../lib -I../lib -c idivec.f -o ../objs/idivec.o
+ifort -r8 -module ../lib -I../lib -c idives.f -o ../objs/idives.o
+ifort -r8 -module ../lib -I../lib -c idivgc.f -o ../objs/idivgc.o
+ifort -r8 -module ../lib -I../lib -c idivgs.f -o ../objs/idivgs.o
+ifort -r8 -module ../lib -I../lib -c idvtec.f -o ../objs/idvtec.o
+ifort -r8 -module ../lib -I../lib -c idvtes.f -o ../objs/idvtes.o
+ifort -r8 -module ../lib -I../lib -c idvtgc.f -o ../objs/idvtgc.o
+ifort -r8 -module ../lib -I../lib -c idvtgs.f -o ../objs/idvtgs.o
+ifort -r8 -module ../lib -I../lib -c igradec.f -o ../objs/igradec.o
+ifort -r8 -module ../lib -I../lib -c igrades.f -o ../objs/igrades.o
+ifort -r8 -module ../lib -I../lib -c igradgc.f -o ../objs/igradgc.o
+ifort -r8 -module ../lib -I../lib -c igradgs.f -o ../objs/igradgs.o
+ifort -r8 -module ../lib -I../lib -c ihgeod.f -o ../objs/ihgeod.o
+ifort -r8 -module ../lib -I../lib -c isfvpec.f -o ../objs/isfvpec.o
+ifort -r8 -module ../lib -I../lib -c isfvpes.f -o ../objs/isfvpes.o
+ifort -r8 -module ../lib -I../lib -c isfvpgc.f -o ../objs/isfvpgc.o
+ifort -r8 -module ../lib -I../lib -c isfvpgs.f -o ../objs/isfvpgs.o
+ifort -r8 -module ../lib -I../lib -c islapec.f -o ../objs/islapec.o
+ifort -r8 -module ../lib -I../lib -c islapes.f -o ../objs/islapes.o
+ifort -r8 -module ../lib -I../lib -c islapgc.f -o ../objs/islapgc.o
+ifort -r8 -module ../lib -I../lib -c islapgs.f -o ../objs/islapgs.o
+ifort -r8 -module ../lib -I../lib -c ivlapec.f -o ../objs/ivlapec.o
+ifort -r8 -module ../lib -I../lib -c ivlapes.f -o ../objs/ivlapes.o
+ifort -r8 -module ../lib -I../lib -c ivlapgc.f -o ../objs/ivlapgc.o
+ifort -r8 -module ../lib -I../lib -c ivlapgs.f -o ../objs/ivlapgs.o
+ifort -r8 -module ../lib -I../lib -c ivrtec.f -o ../objs/ivrtec.o
+ifort -r8 -module ../lib -I../lib -c ivrtes.f -o ../objs/ivrtes.o
+ifort -r8 -module ../lib -I../lib -c ivrtgc.f -o ../objs/ivrtgc.o
+ifort -r8 -module ../lib -I../lib -c ivrtgs.f -o ../objs/ivrtgs.o
+ifort -r8 -module ../lib -I../lib -c lfim.f -o ../objs/lfim.o
+ifort -r8 -module ../lib -I../lib -c lfin.f -o ../objs/lfin.o
+ifort -r8 -module ../lib -I../lib -c lfp.f -o ../objs/lfp.o
+ifort -r8 -module ../lib -I../lib -c lfpt.f -o ../objs/lfpt.o
+ifort -r8 -module ../lib -I../lib -c sfvpec.f -o ../objs/sfvpec.o
+ifort -r8 -module ../lib -I../lib -c sfvpes.f -o ../objs/sfvpes.o
+ifort -r8 -module ../lib -I../lib -c sfvpgc.f -o ../objs/sfvpgc.o
+ifort -r8 -module ../lib -I../lib -c sfvpgs.f -o ../objs/sfvpgs.o
+ifort -r8 -module ../lib -I../lib -c shaec.f -o ../objs/shaec.o
+ifort -r8 -module ../lib -I../lib -c shaes.f -o ../objs/shaes.o
+ifort -r8 -module ../lib -I../lib -c shagc.f -o ../objs/shagc.o
+ifort -r8 -module ../lib -I../lib -c shags.f -o ../objs/shags.o
+ifort -r8 -module ../lib -I../lib -c shallow.f -o ../objs/shallow.o
+ifort -r8 -module ../lib -I../lib -c shigc.f -o ../objs/shigc.o
+ifort -r8 -module ../lib -I../lib -c shigs.f -o ../objs/shigs.o
+ifort -r8 -module ../lib -I../lib -c shpe.f -o ../objs/shpe.o
+gmake[1]: *** Destruction du fichier « ../objs/shpe.o »
+gmake[1]: *** [../objs/shpe.o] Erreur 2
+make: *** [libspherepack] Interrompre
