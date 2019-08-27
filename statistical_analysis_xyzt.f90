@@ -25,7 +25,7 @@ implicit none
 !**********************************************************
 ! omega =  [1] -> 0.000165121 ;  [1/2] -> 0.00008256 ;  [1/4] -> 0.00004128
 !real*8 :: Amp = 0.1,kf=62.,ptimestep=4756.50,radius = 58232000 ! Rayon en metre
-real*8 :: Amp = 0.22,kf=56.,ptimestep= 3805.2,radius = 58232000, omega = 0.00004128 !omega sat:0.000165121  ! [omega]= s-1 ! ptimestep = 1189.125 ; 3805.2 (itau_physics=10 ; 32) ; Rayon en metre Jupiter : radius = 71492000
+real*8 :: Amp = 0.22,kf=56.,ptimestep= 3805.2,radius = 58232000, omega = 0.000165121 !omega sat:0.000165121  ! [omega]= s-1 ! ptimestep = 1189.125 ; 3805.2 (itau_physics=10 ; 32) ; Rayon en metre Jupiter : radius = 71492000
 integer :: TGforcage = 0,NetcdefStatData=1,SavePhysicalFields=1,SavePV=1,SaveSPA=1
 ! Latitude truncation for PV monotonization: here we supress polar values
 integer :: lat_PVmin = 2,lat_PVmax = 1
