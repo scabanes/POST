@@ -12,38 +12,49 @@ implicit none
 ! 		forcage TaylorGreen (TG)
 ! kf = 		est la frequence d injection des perturbat
 !      		-ions du forcage TG.
+! [omega]= s-1  Pour le calcul de la vorticite potentielle
 ! ptimestep = 	temps caracteristique d injection
 !	      	des perturbation TG dans DYNAMICO
 ! NetcdefStatData = 1 to save netcedef data.
 !**********************************************************
-!real*8 :: Amp = 0.1,kf=62.,ptimestep=4756.50,radius = 58232000 ! Rayon en metre
-real*8 :: Amp = 0.0125,kf=56.,ptimestep=1189.125,radius = 58232000 ! Rayon en metre Jupiter : radius = 71492000
-integer :: TGforcage = 1,NetcdefStatData=1  
+! Saving options:
+! NetcdefStatData --> if 1, save data as a Netcdef file
+! SavePhysicalFields --> if 1, save field maps
+! SavePV --> if 1, save PV related data
+! SaveSPA --> if 1, save Spectral related data.
 !**********************************************************
-integer :: iarg,narg,mt,istep,getfield,tstep,dimid_out(3),varid_out(4),latid,altid,colatid,lonid,tid,idinfos,ninfos,idninfos,hnid,fnid,dstepsid,epsilonfid,ERid,ETid,EZid,hn_zmid,fn_zmid,Enid,En_zmid,fnrotid,hnrotid,fndiv1id,hndiv1id,fndiv2id,hndiv2id
+! omega =  [1] -> 0.000165121 ;  [1/2] -> 0.00008256 ;  [1/4] -> 0.00004128
+!real*8 :: Amp = 0.1,kf=62.,ptimestep=4756.50,radius = 58232000 ! Rayon en metre
+real*8 :: Amp = 0.22,kf=56.,ptimestep= 3805.2,radius = 58232000, omega = 0.00004128 !omega sat:0.000165121  ! [omega]= s-1 ! ptimestep = 1189.125 ; 3805.2 (itau_physics=10 ; 32) ; Rayon en metre Jupiter : radius = 71492000
+integer :: TGforcage = 0,NetcdefStatData=1,SavePhysicalFields=1,SavePV=1,SaveSPA=1
+! Latitude truncation for PV monotonization: here we supress polar values
+integer :: lat_PVmin = 2,lat_PVmax = 1
+!**********************************************************
+integer :: iarg,narg,mt,istep,getfield,tstep,dimid_out(3),varid_out(4),latid,altid,colatid,lonid,tid,idinfos,ninfos,idninfos,Urmsid,hnid,PVzmid,PVsortedzmid,LMzmid,fnid,dstepsid,epsilonfid,ERid,ETid,EZid,hn_zmid,fn_zmid,Enid,En_divid,En_rotid,En_zmid,fnrotid,hnrotid,fndiv1id,hndiv1id,fndiv2id,hndiv2id
 character (len=100), dimension(:), allocatable :: arg
 character (len=100) :: tmp_char
 logical :: is_file,NotFirst_reading=.false.,First_reading=.true.
 !----------------------------------------------------------------------
-integer :: nlon=0,nlat=0,nalt,ntime,fieldsmap=0  
-real*8  :: factor, factor2, n=0,iz,ER=0.,EZ=0.,ET=0.,epsilonf_zm=0.
-double precision, dimension (:), allocatable :: fn_zm,hn_zm,fn_rot,hn_rot,fn_div1,hn_div1,fn_div2,hn_div2,Enmo_zm,Ene_zm
-double precision, dimension(:,:,:), allocatable :: vort_r, vort_i, div_r, div_i, sf_r, sf_i, vp_r, vp_i
-double precision, dimension(:,:), allocatable :: vortf_r, vortf_i, divf_r, divf_i,Enmo,Ene
-double precision, dimension(:,:,:), allocatable :: vort,term1_r,term1_i,term2_v,term2_w, term3,vort_uv_br,vort_uv_bi,vort_uv_cr,vort_uv_ci,vortv,vortu,uv_dot_grad_vort_r,uv_dot_grad_vort_i,rot_ugradu_i,rot_ugradu_r,div1_ugradu_i,div1_ugradu_r
+integer :: nlon=0,nlat=0,nlat_mono=0,nalt,ntime,fieldsmap=0,ilat=0,ilon=0,ialt=0,typeS
+real*8  :: factor, factor2, n=0,iz,ER=0.,EZ=0.,ET=0.,epsilonf_zm=0.,Idxtom=0.
+double precision, dimension (:), allocatable :: fn_zm,hn_zm,fn_rot,hn_rot,fn_div1,hn_div1,fn_div2,hn_div2,Enmo_zm,Ene_zm,Urms,PVprof,ascend
+double precision, dimension(:,:,:), allocatable :: vort_r, vort_i, div_r, div_i, sf_r, sf_i, vp_r, vp_i,PVsorted
+double precision, dimension(:,:), allocatable :: vortf_r, vortf_i, divf_r, divf_i,Enmo,Ene,En_rot,En_div,PV_zm
+double precision, dimension(:,:,:), allocatable :: vort,PV,term1_r,term1_i,term2_v,term2_w, term3,vort_uv_br,vort_uv_bi,vort_uv_cr,vort_uv_ci,vortv,vortu,uv_dot_grad_vort_r,uv_dot_grad_vort_i,rot_ugradu_i,rot_ugradu_r,div1_ugradu_i,div1_ugradu_r,fmn,hmn,Emn
 double precision, dimension(:,:), allocatable :: fn,hn
 integer :: mdab_v,mdab_s,mdab_smaller
 !----------------------------------------------------------------------
-double precision, dimension(:,:), allocatable :: uoff_f,voff_f,fvm,fwm,uoff,voff,vm,wm,fbr,fbi,fcr,fci
-double precision, dimension(:,:,:), allocatable :: vm3d,wm3d,u_DYN,v_DYN,UvectVT_lon,UvectVT_lat,u_rot,v_rot,u_div,v_div,udotu,vgrad,wgrad,vgradN,wgradN
+double precision, dimension(:,:), allocatable :: uoff_f,voff_f,fvm,fwm,uoff,voff,vm,wm,fbr,fbi,fcr,fci,LM_zm,PVsorted_zm
+double precision, dimension(:,:,:), allocatable :: vm3d,wm3d,u_DYN,v_DYN,UvectVT_lon,UvectVT_lat,u_rot,v_rot,u_div,v_div,udotu,vgrad,wgrad,vgradN,wgradN,L_M
 double precision, dimension(:,:), allocatable :: fu,fv,rotuwP
-double precision, dimension (:), allocatable :: lat_DYN,lon_DYN,alt_DYN,colat_DYN,dsteps_DYN,lat_SP,lon_SP,colat_SP,epsilonf
+double precision, dimension (:), allocatable :: lat_DYN,lon_DYN,alt_DYN,colat_DYN,dsteps_DYN,lat_SP,lat_mono,lon_SP,colat_SP,epsilonf
 double precision, dimension(:,:,:), allocatable ::  br,bi,cr,ci,Fdivuwr,Fdivuwi,Frotuwr,Frotuwi,Jmn,uur,uui,bbr,bbi,ccr,cci,ar,ai,divgraduur,divgraduui,rotgraduur,rotgraduui,div2_ugradu_r,div2_ugradu_i
 character (len=100) :: file_netcdf,file_spectra,nickname
-integer :: idfile,ncidF,ierror,idu,idv,idlat,idlon,idalt,idvw,jdvw,mdab,ndab,ivrt,jvrt,mdc,ndc,nt=1,ityp=0,isym=0,ioff,fgg,lon_dimid,lat_dimid,alt_dimid,t_dimid,wmid,vmid,vortid, dimids(4),dimids_1d(2),dimids_2d(3),dimids_3d(3), idvti,idfile2,idtime,idnlon,idnlat,idnalt,iddsteps,idSu,fuid,fvid,urotid,vrotid,udivid,vdivid
+integer :: idfile,ncidF,ierror,idu,idv,idlat,idlon,idalt,idvw,jdvw,mdab,ndab,ivrt,jvrt,mdc,ndc,nt=1,ityp=0,isym=0,ioff,fgg,lon_dimid,lat_dimid,latmono_dimid,alt_dimid,t_dimid,wmid,vmid,vortid,Emnid,PVid,PVsortedid,deltaIdxdid, dimid3s(4),dimids(4),dimids_mono(4),dimids_1d(2),dimids_2d(3),dimidsmono_3d(3),dimids_3d(3), dimids_alttime(2), idvti,idfile2,idtime,idnlon,idnlat,idnalt,iddsteps,idSu,fuid,fvid,urotid,vrotid,udivid,vdivid
 integer :: i,j,it,itt,in,jm,ig,l1,ll1,l2,vlwork,lvhsec,lwwork,llwwork,sldwork
 double precision, dimension (:), allocatable :: work,ddwork,vwork
 double precision, dimension (:,:,:), allocatable :: vm_3D,wm_3D,vt_3D
+integer, dimension (:), allocatable :: L_Idx
 real(16), parameter :: PI=4.D0*DATAN(1.D0)
 
 !###################################################################################################################
@@ -106,6 +117,7 @@ if (.not. is_file) then
   print*,"no netcdf file: ",trim(file_netcdf)
   stop "Stopped"
 end if 
+
 !###################################################################################################################
 !===================================================================================================================
 !						 LOAD IN_PUT FILE 
@@ -196,41 +208,69 @@ if(NetcdefStatData == 1) then
   call check( nf90_create(path="StatisticalData.nc", cmode=or(nf90_clobber,nf90_64bit_offset),ncid=ncidF))
   call check( nf90_def_dim(ncidF, "nlon", nlon, lon_dimid))
   call check( nf90_def_dim(ncidF, "nlat", nlat+1, lat_dimid))  !!!!! to change
+  call check( nf90_def_dim(ncidF, "nlat_mono", (nlat+1)-(lat_PVmin+lat_PVmax-1), latmono_dimid))  
   call check( nf90_def_dim(ncidF, "nalt", nalt, alt_dimid))
   call check( nf90_def_dim(ncidF, "time", mt, t_dimid))
   dimids =  (/ lat_dimid, lon_dimid, alt_dimid, t_dimid /)!
+  dimids_mono =  (/ latmono_dimid, lon_dimid, alt_dimid, t_dimid /)!
+  dimid3s =  (/ lat_dimid, lat_dimid, alt_dimid, t_dimid /)!
   dimids_2d =  (/ lat_dimid, lon_dimid, t_dimid /)!
   dimids_1d =  (/ lat_dimid, t_dimid /)!
   dimids_3d =  (/ lat_dimid, alt_dimid, t_dimid /)!
+  dimidsmono_3d =  (/ latmono_dimid, alt_dimid, t_dimid /)!
+  dimids_alttime = (/ alt_dimid, t_dimid /)!
+!-------------------------------------------------------------------------------------------
+!-------------------------------------------------------------------------------------------
 ! ---------------------------DFINITION OF VARIBLES
   call check( nf90_def_var(ncidF, "lon", NF90_DOUBLE, lon_dimid, lonid))
   call check( nf90_def_var(ncidF, "lat", NF90_DOUBLE, lat_dimid, latid))
   call check( nf90_def_var(ncidF, "altitude", NF90_DOUBLE, alt_dimid, altid))
-  call check( nf90_def_var(ncidF, "time", NF90_REAL4, t_dimid, tid))
   call check( nf90_def_var(ncidF, "colat", NF90_DOUBLE, lat_dimid, colatid))
-! champ 1d
-  call check( nf90_def_var(ncidF, "Enmo", NF90_DOUBLE, dimids_3d, En_zmid))
-  call check( nf90_def_var(ncidF, "Ene", NF90_DOUBLE, dimids_3d, Enid))
-  call check( nf90_def_var(ncidF, "fn_zm", NF90_DOUBLE, dimids_1d, fn_zmid))
-  call check( nf90_def_var(ncidF, "hn_zm", NF90_DOUBLE, dimids_1d, hn_zmid))
-  call check( nf90_def_var(ncidF, "fn", NF90_DOUBLE, dimids_3d, fnid))
-  call check( nf90_def_var(ncidF, "hn", NF90_DOUBLE, dimids_3d, hnid))
-! time dimension
+!------------------------------------------------------------------------------------------
+! from here time dependent varialbes
+  call check( nf90_def_var(ncidF, "time", NF90_REAL4, t_dimid, tid))
+  call check( nf90_def_var(ncidF, "Urms", NF90_DOUBLE, dimids_alttime, Urmsid))
+
   call check( nf90_def_var(ncidF, "dsteps", NF90_DOUBLE, t_dimid, dstepsid))
   call check( nf90_def_var(ncidF, "ET", NF90_DOUBLE, t_dimid, ETid))
   call check( nf90_def_var(ncidF, "EZ", NF90_DOUBLE, t_dimid, EZid))
   call check( nf90_def_var(ncidF, "ER", NF90_DOUBLE, t_dimid, ERid))
   call check( nf90_def_var(ncidF, "epsilonf", NF90_DOUBLE, t_dimid, epsilonfid))
+!------------------------------------------------------------------------------------------
+if(SaveSPA == 1) then !--------------------------------------------------------------------- Spectral related
+  call check( nf90_def_var(ncidF, "Enmo", NF90_DOUBLE, dimids_3d, En_zmid))
+  call check( nf90_def_var(ncidF, "Ene", NF90_DOUBLE, dimids_3d, Enid))
+  call check( nf90_def_var(ncidF, "En_rot", NF90_DOUBLE, dimids_3d, En_rotid))
+  call check( nf90_def_var(ncidF, "En_div", NF90_DOUBLE, dimids_3d, En_divid))
+  call check( nf90_def_var(ncidF, "fn_zm", NF90_DOUBLE, dimids_1d, fn_zmid))
+  call check( nf90_def_var(ncidF, "hn_zm", NF90_DOUBLE, dimids_1d, hn_zmid))
+  call check( nf90_def_var(ncidF, "fn", NF90_DOUBLE, dimids_3d, fnid))
+  call check( nf90_def_var(ncidF, "hn", NF90_DOUBLE, dimids_3d, hnid))
+  call check( nf90_def_var(ncidF, "Emn", NF90_DOUBLE, dimid3s, Emnid))
+
   !call check( nf90_def_var(ncidF, "fn_rot", NF90_DOUBLE, dimids_1d, fnrotid))
   !call check( nf90_def_var(ncidF, "hn_rot", NF90_DOUBLE, dimids_1d, hnrotid))
   !call check( nf90_def_var(ncidF, "fn_div1", NF90_DOUBLE, dimids_1d, fndiv1id))
   !call check( nf90_def_var(ncidF, "hn_div1", NF90_DOUBLE, dimids_1d, hndiv1id))
   !call check( nf90_def_var(ncidF, "fn_div2", NF90_DOUBLE, dimids_1d, fndiv2id))
   !call check( nf90_def_var(ncidF, "hn_div2", NF90_DOUBLE, dimids_1d, hndiv2id))
-! champ 2d
-  !call check( nf90_def_var(ncidF, "wm", NF90_DOUBLE, dimids, wmid)) !----Cosi
-  !call check( nf90_def_var(ncidF, "vm", NF90_DOUBLE, dimids, vmid)) !----Cosi
-  !call check( nf90_def_var(ncidF, "vort", NF90_DOUBLE, dimids, vortid)) !----Cosi
+end if
+if(SavePhysicalFields == 1) then !-------------------------------------------------------- 3D maps
+    call check( nf90_def_var(ncidF, "wm", NF90_DOUBLE, dimids, wmid)) 
+    call check( nf90_def_var(ncidF, "vm", NF90_DOUBLE, dimids, vmid)) 
+    call check( nf90_def_var(ncidF, "vort", NF90_DOUBLE, dimids, vortid))
+end if
+if(SavePV == 1) then !-------------------------------------------------------------------- PV related
+    ! 3D fields
+    call check( nf90_def_var(ncidF, "PV", NF90_DOUBLE, dimids, PVid))
+    call check( nf90_def_var(ncidF, "PVsorted", NF90_DOUBLE, dimids_mono, PVsortedid))
+    call check( nf90_def_var(ncidF, "L_M", NF90_DOUBLE, dimids_mono, deltaIdxdid))
+    ! 2D fields 
+    call check( nf90_def_var(ncidF, "PV_zm", NF90_DOUBLE, dimids_3d, PVzmid))
+    call check( nf90_def_var(ncidF, "PVsorted_zm", NF90_DOUBLE, dimidsmono_3d, PVsortedzmid))
+    call check( nf90_def_var(ncidF, "LM_zm", NF90_DOUBLE, dimidsmono_3d, LMzmid))
+end if
+
   !call check( nf90_def_var(ncidF, "u_rot", NF90_DOUBLE, dimids, urotid))
   !call check( nf90_def_var(ncidF, "v_rot", NF90_DOUBLE, dimids, vrotid))
   !call check( nf90_def_var(ncidF, "u_div", NF90_DOUBLE, dimids, udivid))
@@ -238,31 +278,59 @@ if(NetcdefStatData == 1) then
   
   !call check( nf90_def_var(ncidF, "fu", NF90_DOUBLE, dimids, fuid))
   !call check( nf90_def_var(ncidF, "fv", NF90_DOUBLE, dimids, fvid))
-! ---------------------------VARIABLES FILL INSTRUCTIONS
-! champ 1d
+
+
+!-------------------------------------------------------------------------------------------
+!-------------------------------------------------------------------------------------------
+! ---------------------------VARIABLES FILL INSTRUCTIONS for time dependent variables
+
+  call check( NF90_PUT_ATT  (ncidF, tid, "_FillValue", NF90_FILL_REAL4) )
+  call check( NF90_PUT_ATT  (ncidF, Urmsid, "_FillValue", NF90_FILL_DOUBLE) )
+
+  call check( NF90_PUT_ATT  (ncidF, dstepsid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, ETid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, EZid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, ERid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, epsilonfid, "_FillValue", NF90_FILL_DOUBLE) )
+
+!------------------------------------------------------------------------------------------
+if(SaveSPA == 1) then !--------------------------------------------------------------------- Spectral related
   call check( NF90_PUT_ATT  (ncidF, En_zmid, "_FillValue", NF90_FILL_DOUBLE) )
   call check( NF90_PUT_ATT  (ncidF, Enid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, En_rotid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, En_divid, "_FillValue", NF90_FILL_DOUBLE) )
   call check( NF90_PUT_ATT  (ncidF, fn_zmid, "_FillValue", NF90_FILL_DOUBLE) )
   call check( NF90_PUT_ATT  (ncidF, hn_zmid, "_FillValue", NF90_FILL_DOUBLE) )
   call check( NF90_PUT_ATT  (ncidF, fnid, "_FillValue", NF90_FILL_DOUBLE) )
   call check( NF90_PUT_ATT  (ncidF, hnid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, Emnid, "_FillValue", NF90_FILL_DOUBLE) )
+
   !call check( NF90_PUT_ATT  (ncidF, fnrotid, "_FillValue", NF90_FILL_DOUBLE) )
   !call check( NF90_PUT_ATT  (ncidF, hnrotid, "_FillValue", NF90_FILL_DOUBLE) )
   !call check( NF90_PUT_ATT  (ncidF, hndiv1id, "_FillValue", NF90_FILL_DOUBLE) )
   !call check( NF90_PUT_ATT  (ncidF, fndiv1id, "_FillValue", NF90_FILL_DOUBLE) )
   !call check( NF90_PUT_ATT  (ncidF, hndiv2id, "_FillValue", NF90_FILL_DOUBLE) )
   !call check( NF90_PUT_ATT  (ncidF, fndiv2id, "_FillValue", NF90_FILL_DOUBLE) )
-!time dimension
-  call check( NF90_PUT_ATT  (ncidF, dstepsid, "_FillValue", NF90_FILL_DOUBLE) )
-  call check( NF90_PUT_ATT  (ncidF, ETid, "_FillValue", NF90_FILL_DOUBLE) )
-  call check( NF90_PUT_ATT  (ncidF, EZid, "_FillValue", NF90_FILL_DOUBLE) )
-  call check( NF90_PUT_ATT  (ncidF, ERid, "_FillValue", NF90_FILL_DOUBLE) )
-  call check( NF90_PUT_ATT  (ncidF, epsilonfid, "_FillValue", NF90_FILL_DOUBLE) )
-! champ 2d
-  call check( NF90_PUT_ATT  (ncidF, tid, "_FillValue", NF90_FILL_REAL4) )
-  !call check( NF90_PUT_ATT  (ncidF, wmid, "_FillValue", NF90_FILL_DOUBLE) ) !----Cosi
-  !call check( NF90_PUT_ATT  (ncidF, vmid, "_FillValue", NF90_FILL_DOUBLE) ) !----Cosi
-  !call check( NF90_PUT_ATT  (ncidF, vortid, "_FillValue", NF90_FILL_DOUBLE) ) !----Cosi
+end if
+
+
+if(SavePhysicalFields == 1) then !-------------------------------------------------------- 3D maps
+  call check( NF90_PUT_ATT  (ncidF, wmid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, vmid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, vortid, "_FillValue", NF90_FILL_DOUBLE) ) 
+end if
+if(SavePV == 1) then !-------------------------------------------------------------------- PV related
+    ! 3D fields 
+  call check( NF90_PUT_ATT  (ncidF, PVid, "_FillValue", NF90_FILL_DOUBLE) ) 
+  call check( NF90_PUT_ATT  (ncidF, PVsortedid, "_FillValue", NF90_FILL_DOUBLE) ) 
+  call check( NF90_PUT_ATT  (ncidF, deltaIdxdid, "_FillValue", NF90_FILL_DOUBLE) ) 
+    ! 2D fields 
+  call check( NF90_PUT_ATT  (ncidF, PVzmid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, PVsortedzmid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, LMzmid, "_FillValue", NF90_FILL_DOUBLE) )
+end if
+
+
   !call check( NF90_PUT_ATT  (ncidF, urotid, "_FillValue", NF90_FILL_DOUBLE) )
   !call check( NF90_PUT_ATT  (ncidF, vrotid, "_FillValue", NF90_FILL_DOUBLE) )
   !call check( NF90_PUT_ATT  (ncidF, udivid, "_FillValue", NF90_FILL_DOUBLE) )
@@ -332,6 +400,7 @@ allocate(fwm(nlat+1,nlon)) ; fwm(:,:) = 0.0d0
 ! WIND Northern->southern hemisphere ordered data
 allocate(vm3d(nlat+1,nlon,nalt)) !; vm3d(:,:,:) = 0.0d0
 allocate(wm3d(nlat+1,nlon,nalt)) !; wm3d(:,:,:) = 0.0d0
+allocate(Urms(nalt))
 !#------------------------------------------------------------------------------------------------------------------------------------
 do iz = 1,nalt !#------------------------------------------------------------------------------------------------- START Altitude LOOP
 ! WIND field grid South->North
@@ -345,12 +414,16 @@ allocate(wm(nlat+1,nlon)) ; wm(:,:) = 0.0d0
 
 vm3d(:,:,iz) = vm
 wm3d(:,:,iz) = wm
+!Urms(iz) = sqrt(SUM(vm*vm + wm*wm)/((nlat+1)*nlon))
+Urms(iz) = sqrt(SUM(wm*wm)/((nlat+1)*nlon))
 deallocate(uoff)
 deallocate(voff)
 deallocate(vm)
 deallocate(wm)
 end do!#------------------------------------------------------------------------------------------------------------- END Altitude LOOP
 !#-------------------------------------------------------------------------------------------------------------------------------------
+print*,'Urms = '
+print*,Urms
 !######################################################################################
 ! #############################################     NOUVELLES COORDONNEES LAT-LON-COLAT
 ! vshifte et geo2mathv redefinissent la grille comme suit:
@@ -490,9 +563,58 @@ end do
 ! vt(i,j) =  [-dv/dlambda + d(sint*w)/dtheta]/sint sur une sphere
 ! de rayon unite avec 1/raidus pour avoir la vorticite voir 
 ! coeffs vort_r et vort_i.
+!******** Vorticite relative **************************************
+! truncation in latitude to cancel, at least, polar value. 
+nlat_mono = nlat-(lat_PVmin+lat_PVmax-1)
+allocate(lat_mono(nlat_mono)) ; lat_mono = 0.0d0
+lat_mono = lat_SP(lat_PVmin:nlat-lat_PVmax)
 !******************************************************************
+!size nlat
 allocate(vort(nlat,nlon,nalt)) ; vort = 0.0d0
+allocate(PV(nlat,nlon,nalt)) ; PV = 0.0d0
+allocate(PV_zm(nlat,nalt)) ; PV_zm = 0.0d0
+! size nlat_mono
+allocate(PVsorted(nlat_mono,nlon,nalt)) ; PVsorted = 0.0d0
+allocate(PVsorted_zm(nlat_mono,nalt)) ; PVsorted_zm = 0.0d0
+allocate(L_M(nlat_mono,nlon,nalt)) ; L_M = 0.0d0
+allocate(LM_zm(nlat_mono,nalt)) ; LM_zm = 0.0d0
+allocate(PVprof(nlat_mono)); PVprof = 0.0d0
+allocate(ascend(nlat_mono)); ascend = 0.0d0 ! ascendent sorted data
+allocate(L_Idx(nlat_mono)); L_Idx = 0 ! Index sorted 
  call SHS(nlon,nlat,nalt,isym,vort,mdab_s,ndab,vort_r,vort_i)
+!******** Vorticite potentielle ***********************************
+!                  &
+!	     Monotonization
+!******************************************************************
+! Call a sorting function that: sorting(ndata,VtoSort,Vsorted,typeS,Idx)
+! if typeS == 1 ascendent sorting & typeS == 2 descendent sorting
+! The ascendent choice depend on the data order. The output are,
+! ndata: is the length of VtoSort(ndata)
+! Vtosort: is a single vector
+! Vsorted: is a vector once Vtosort sorted it has the same length
+! Idx: are index unsorted - index sorted --> typical sorted scale
+!
+! Tyical sorted scale is converted from index to meter via Idxtom
+!******************************************************************
+typeS=2
+Idxtom = (PI*radius)/(nlat-1) ![(PI*radius)/(nlat-1)] = [Idxto m]= m et la conversion d indice en m en multipliant par le pas en m
+print*, Idxtom
+do ialt = 1, nalt ! ----------- loop on the altitude
+  do ilon = 1, nlon ! ----------- loop on the longitude
+    PV(:,ilon,ialt) = vort(:,ilon,ialt) + 2.0d0 * omega * sin(lat_SP/(180./PI))
+    ! Sorting on instantaneous -- truncation in latitude --
+    PVprof=PV(lat_PVmin:nlat-lat_PVmax,ilon,ialt)
+    call sorting(nlat_mono,PVprof,ascend,typeS,L_Idx) 
+    PVsorted(:,ilon,ialt) = ascend
+    L_M(:,ilon,ialt) = abs(L_Idx)*Idxtom
+  enddo ! ----------- end loop on the longitude
+    ! Sorting on zonal mean PV profil
+    PV_zm(:,ialt) = sum(PV(:,:,ialt),DIM=2)/nlon
+    PVprof= PV_zm(lat_PVmin:nlat-lat_PVmax,ialt)
+    call sorting(nlat_mono,PVprof,ascend,typeS,L_Idx) 
+    PVsorted_zm(:,ialt) = ascend
+    LM_zm(:,ialt) = abs(L_Idx)*Idxtom
+enddo
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 !							Rotational & divergent velocities vector:
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -516,12 +638,12 @@ u_div = u_div * radius
 !					     		Kinetic Energy Spectra
 !========================================================================================================================================
 !########################################################################################################################################
+allocate(Emn(mdab_s,ndab,nalt)) ; Emn    = 0.0d0
 allocate(Enmo(ndab,nalt)) ; Enmo    = 0.0d0
-allocate(Ene(ndab-1,nalt)) ; Ene    = 0.0d0
+allocate(Ene(ndab,nalt)) ; Ene    = 0.0d0
 allocate(Enmo_zm(ndab)) ; Enmo_zm    = 0.0d0
-allocate(Ene_zm(ndab-1)) ; Ene_zm    = 0.0d0
- call ES(mdab_s,ndab,nalt,radius,vort_r,vort_i,div_r,div_i,Enmo,Ene,Enmo_zm,Ene_zm,ER,EZ,ET)
-
+allocate(Ene_zm(ndab)) ; Ene_zm    = 0.0d0
+ call ES(mdab_s,ndab,nalt,radius,vort_r,vort_i,div_r,div_i,Emn,Enmo,Ene,Enmo_zm,Ene_zm,ER,EZ,ET,En_rot,En_div)
 !########################################################################################################################################
 !========================================================================================================================================
 !					     		SPECTRAL FLUXES --- div(u) = 0
@@ -595,7 +717,10 @@ allocate(fn(ndab,nalt)) ; fn = 0.0d0
 allocate(hn(ndab,nalt)) ; hn = 0.0d0
 allocate(fn_zm(ndab)) ; fn_zm = 0.0d0
 allocate(hn_zm(ndab)) ; hn_zm = 0.0d0
- call FLUXES(mdab_s,ndab,nalt,radius,term1_r,term1_i,uv_dot_grad_vort_r,uv_dot_grad_vort_i,fn,hn,fn_zm,hn_zm)
+!
+allocate(fmn(mdab_s,ndab,nalt)) ; fmn = 0.0d0
+allocate(hmn(mdab_s,ndab,nalt)) ; hmn = 0.0d0
+ call FLUXES(mdab_s,ndab,nalt,radius,term1_r,term1_i,uv_dot_grad_vort_r,uv_dot_grad_vort_i,fn,hn,fn_zm,hn_zm,fmn,hmn)
 
 !########################################################################################################################################
 !========================================================================================================================================
@@ -635,38 +760,59 @@ if(NetcdefStatData == 1) then
   else
     First_reading = .false.
   end if
-!champ 2d
+!------------------------------------------------------------------------------------------
    call check( nf90_put_var( ncidF, tid, it, start=(/it/) ) )
-   !call check( nf90_put_var( ncidF, wmid, wm3d,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) !----Cosi
-   !call check( nf90_put_var( ncidF, vmid, vm3d,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) !----Cosi
-   !call check( nf90_put_var( ncidF, vortid, vort,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) !----Cosi
+   call check( nf90_put_var( ncidF, Urmsid, Urms,(/1,it/),(/nalt,1/) ) )
 
-   !call check( nf90_put_var( ncidF, urotid, transpose(u_rot),(/1,1,it/),(/nlon,nlat,1/) ) )
-   !call check( nf90_put_var( ncidF, vrotid, transpose(v_rot),(/1,1,it/),(/nlon,nlat,1/) ) )
-   !call check( nf90_put_var( ncidF, udivid, transpose(u_div),(/1,1,it/),(/nlon,nlat,1/) ) )
-   !call check( nf90_put_var( ncidF, vdivid, transpose(v_div),(/1,1,it/),(/nlon,nlat,1/) ) )
-!champ 1d
-   call check( nf90_put_var( ncidF, En_zmid, Enmo,(/1,1,it/),(/nlat,nalt,1/) ) )
-   call check( nf90_put_var( ncidF, Enid, Ene,(/1,1,it/),(/nlat,nalt,1/) ) )
-   call check( nf90_put_var( ncidF, fn_zmid, fn_zm,(/1,it/),(/nlat,1/) ) )
-   call check( nf90_put_var( ncidF, hn_zmid, hn_zm,(/1,it/),(/nlat,1/) ) )
-   call check( nf90_put_var( ncidF, fnid, fn,(/1,1,it/),(/nlat,nalt,1/) ) )
-   call check( nf90_put_var( ncidF, hnid, hn,(/1,1,it/),(/nlat,nalt,1/) ) )
-!time dimension
    call check( nf90_put_var( ncidF, dstepsid, dsteps_DYN(it), start=(/it/) ) )
    call check( nf90_put_var( ncidF, ETid, ET, start=(/it/) ) )
    call check( nf90_put_var( ncidF, EZid, EZ, start=(/it/) ) )
    call check( nf90_put_var( ncidF, ERid, ER, start=(/it/) ) )
    call check( nf90_put_var( ncidF, epsilonfid, epsilonf_zm, start=(/it/) ) )
 
-   !call check( nf90_put_var( ncidF, ERid, ER,(/it/),(/1/) ) )
-   !call check( nf90_put_var( ncidF, EZid, EZ,(/it/),(/1/) ) )
-   !call check( nf90_put_var( ncidF, fnrotid, fn_rot,(/1,it/),(/nlat,1/) ) )
+!------------------------------------------------------------------------------------------
+if(SaveSPA == 1) then !--------------------------------------------------------------------- Spectral related
+   call check( nf90_put_var( ncidF, En_zmid, Enmo,(/1,1,it/),(/nlat,nalt,1/) ) )
+   call check( nf90_put_var( ncidF, Enid, Ene,(/1,1,it/),(/nlat,nalt,1/) ) )
+   call check( nf90_put_var( ncidF, En_rotid, En_rot,(/1,1,it/),(/nlat,nalt,1/) ) )
+   call check( nf90_put_var( ncidF, En_divid, En_div,(/1,1,it/),(/nlat,nalt,1/) ) )
+   call check( nf90_put_var( ncidF, fn_zmid, fn_zm,(/1,it/),(/nlat,1/) ) )
+   call check( nf90_put_var( ncidF, hn_zmid, hn_zm,(/1,it/),(/nlat,1/) ) )
+   call check( nf90_put_var( ncidF, fnid, fn,(/1,1,it/),(/nlat,nalt,1/) ) )
+   call check( nf90_put_var( ncidF, hnid, hn,(/1,1,it/),(/nlat,nalt,1/) ) )
+   call check( nf90_put_var( ncidF, Emnid, Emn,(/1,1,1,it/),(/nlat,nlat,nalt,1/) ) )
+
+ !call check( nf90_put_var( ncidF, fnrotid, fn_rot,(/1,it/),(/nlat,1/) ) )
    !call check( nf90_put_var( ncidF, hnrotid, hn_rot,(/1,it/),(/nlat,1/) ) )
    !call check( nf90_put_var( ncidF, fndiv1id, fn_div1,(/1,it/),(/nlat,1/) ) )
    !call check( nf90_put_var( ncidF, hndiv1id, hn_div1,(/1,it/),(/nlat,1/) ) )
    !call check( nf90_put_var( ncidF, fndiv2id, fn_div2,(/1,it/),(/nlat,1/) ) )
    !call check( nf90_put_var( ncidF, hndiv2id, hn_div2,(/1,it/),(/nlat,1/) ) )
+
+end if
+if(SavePhysicalFields == 1) then !----------------------------------------------------------- 3D maps
+     call check( nf90_put_var( ncidF, wmid, wm3d,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) 
+     call check( nf90_put_var( ncidF, vmid, vm3d,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) 
+     call check( nf90_put_var( ncidF, vortid, vort,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) )
+end if
+if(SavePV == 1) then !---------------------------------------------------------------------- PV related
+    ! 3D fields 
+   call check( nf90_put_var( ncidF, PVid, PV,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) )
+   call check( nf90_put_var( ncidF, PVsortedid, PVsorted,(/1,1,1,it/),(/nlat_mono,nlon,nalt,1/) ) ) 
+   call check( nf90_put_var( ncidF, deltaIdxdid, L_M,(/1,1,1,it/),(/nlat_mono,nlon,nalt,1/) ) ) 
+    ! 2D fields 
+   call check( nf90_put_var( ncidF, PVzmid, PV_zm,(/1,1,it/),(/nlat,nalt,1/) ) )
+   call check( nf90_put_var( ncidF, PVsortedzmid, PVsorted_zm,(/1,1,it/),(/nlat_mono,nalt,1/) ) )
+   call check( nf90_put_var( ncidF, LMzmid, LM_zm,(/1,1,it/),(/nlat_mono,nalt,1/) ) )
+end if
+
+   !call check( nf90_put_var( ncidF, urotid, transpose(u_rot),(/1,1,it/),(/nlon,nlat,1/) ) )
+   !call check( nf90_put_var( ncidF, vrotid, transpose(v_rot),(/1,1,it/),(/nlon,nlat,1/) ) )
+   !call check( nf90_put_var( ncidF, udivid, transpose(u_div),(/1,1,it/),(/nlon,nlat,1/) ) )
+   !call check( nf90_put_var( ncidF, vdivid, transpose(v_div),(/1,1,it/),(/nlon,nlat,1/) ) )
+
+   !call check( nf90_put_var( ncidF, ERid, ER,(/it/),(/1/) ) )
+   !call check( nf90_put_var( ncidF, EZid, EZ,(/it/),(/1/) ) )
 
    !call check( nf90_put_var( ncidF, fuid, transpose(fwm),(/1,1,it/),(/nlon,nlat,1/) ) )
    !call check( nf90_put_var( ncidF, fvid, transpose(fvm),(/1,1,it/),(/nlon,nlat,1/) ) )
@@ -681,6 +827,7 @@ deallocate(uoff_f)
 deallocate(voff_f)
 deallocate(vm3d)
 deallocate(wm3d)
+deallocate(Urms)
 deallocate(fvm)
 deallocate(fwm)
 deallocate(br)
@@ -711,6 +858,16 @@ deallocate(vp_i)
 deallocate(vortv)
 deallocate(vortu)
 deallocate(vort)
+deallocate(lat_mono)
+deallocate(PV)
+deallocate(PV_zm)
+deallocate(PVprof)
+deallocate(PVsorted)
+deallocate(PVsorted_zm)
+deallocate(ascend)
+deallocate(L_M)
+deallocate(LM_zm)
+deallocate(L_Idx)
 deallocate(u_div)
 deallocate(v_div)
 deallocate(term1_r)
@@ -720,6 +877,8 @@ deallocate(term2_w)
 deallocate(term3)
 deallocate(hn)
 deallocate(fn)
+deallocate(hmn)
+deallocate(fmn)
 deallocate(hn_zm)
 deallocate(fn_zm)
 deallocate(vort_uv_br)
@@ -728,11 +887,14 @@ deallocate(vort_uv_cr)
 deallocate(vort_uv_ci)
 deallocate(uv_dot_grad_vort_r)
 deallocate(uv_dot_grad_vort_i)
+deallocate(Emn)
 deallocate(Enmo)
 deallocate(Ene)
 deallocate(Enmo_zm)
 deallocate(Ene_zm)
 deallocate(epsilonf)
+deallocate(En_rot)
+deallocate(En_div)
 
 end do!#---------------------------------------------------------------------------------------------------------------- ENS TIME LOOP
 !#------------------------------------------------------------------------------------------------------------------------------------
@@ -1402,13 +1564,13 @@ end subroutine DIVROTV
 !###################################################################################################################
 !###################################################################################################################
 ! ---------- FLUXES
-subroutine FLUXES(mdab_s,ndab,nalt,radius,Cmn1_r,Cmn1_i,Cmn2_r,Cmn2_i,fn,hn,fn_zm,hn_zm)
+subroutine FLUXES(mdab_s,ndab,nalt,radius,Cmn1_r,Cmn1_i,Cmn2_r,Cmn2_i,fn,hn,fn_zm,hn_zm,fmn,hmn)
     implicit none
-    integer :: mdab_s,ndab,nalt,id
+    integer :: mdab_s,ndab,nalt,id,im
     real*8 :: radius,n=0,m=0
     double precision, dimension (:), allocatable :: ji_conversion,fn_zm,hn_zm,jn_zm,in_zm
     double precision, dimension(:,:), allocatable :: jmn_zm,imn_zm,jn,in,fn,hn
-    double precision, dimension(:,:,:), allocatable :: jmn,imn,Cmn1_r,Cmn1_i,Cmn2_r,Cmn2_i
+    double precision, dimension(:,:,:), allocatable :: jmn,imn,Cmn1_r,Cmn1_i,Cmn2_r,Cmn2_i,fmn,hmn
 
 ! Allocate and initialise the transfers and fluxes
 allocate(jmn(mdab_s,ndab,nalt)) ; jmn    = 0.0d0
@@ -1419,6 +1581,10 @@ allocate(jn(ndab,nalt)) ; jn    = 0.0d0
 allocate(in(ndab,nalt)) ; in    = 0.0d0
 allocate(jn_zm(ndab)) ; jn_zm = 0.0d0
 allocate(in_zm(ndab)) ; in_zm = 0.0d0
+!
+!allocate(jmn(mdab_s,ndab,nalt)) ; fmn    = 0.0d0			----------ici commente je sais pas pourquoi
+!allocate(imn(mdab_s,ndab,nalt)) ; hmn    = 0.0d0			----------ici commente je sais pas pourquoi
+
 !=====================================================
 ! Conversion factor
 !=====================================================
@@ -1484,6 +1650,16 @@ in_zm(:) = jn_zm(:) * ji_conversion
 !====================================================================
 write(6,'(a)') "1D enstrophy and energy spectral fluxes for each day ..."
 do id = 1, nalt
+do im = 1, mdab_s
+  do n = 1, ndab-1 ! n > 0 terms (n = 0 term is zero)
+    fmn(im,n+1,id) = -sum(imn(im,1:n,id)) ! Energy flux
+    hmn(im,n+1,id) = -sum(jmn(im,1:n,id)) ! Enstrophy flux
+  enddo
+enddo
+enddo
+
+write(6,'(a)') "1D enstrophy and energy spectral fluxes for each day ..."
+do id = 1, nalt
   do n = 1, ndab-1 ! n > 0 terms (n = 0 term is zero)
     fn(n+1,id) = -sum(in(1:n,id)) ! Energy flux
     hn(n+1,id) = -sum(jn(1:n,id)) ! Enstrophy flux
@@ -1505,18 +1681,23 @@ end subroutine FLUXES
 !###################################################################################################################
 !###################################################################################################################
 ! ---------- ES
-subroutine ES(mdab_s,ndab,nalt,radius,cmn_r,cmn_i,bmn_r,bmn_i,Enmo,Ene,Enmo_zm,Ene_zm,ER,EZ,ET)
+subroutine ES(mdab_s,ndab,nalt,radius,cmn_r,cmn_i,bmn_r,bmn_i,Emn,Enmo,Ene,Enmo_zm,Ene_zm,ER,EZ,ET,En_rot,En_div)
     implicit none
     integer :: mdab_s,ndab,nalt,id
     real*8 :: radius,n=0,m=0,ER,EZ,ET
     double precision, dimension (:), allocatable :: ji_conversion,En_zm,Enmo_zm,Ene_zm
-    double precision, dimension(:,:), allocatable :: Emn_zm,En,Enmo,Ene
-    double precision, dimension(:,:,:), allocatable :: cmn_r,cmn_i,bmn_r,bmn_i,Emn
+    double precision, dimension(:,:), allocatable :: Emn_zm,En,Enmo,Ene,En_rot,En_div
+    double precision, dimension(:,:,:), allocatable :: cmn_r,cmn_i,bmn_r,bmn_i,Emn,Emn_rot,Emn_div
 
-allocate(Emn(mdab_s,ndab,nalt)) ; Emn    = 0.0d0
+!allocate(Emn(mdab_s,ndab,nalt)) ; Emn    = 0.0d0
 allocate(Emn_zm(mdab_s,ndab)) ; Emn_zm    = 0.0d0
 allocate(En(ndab,nalt)) ; En    = 0.0d0
 allocate(En_zm(ndab)) ; En_zm    = 0.0d0
+!div-rot
+allocate(Emn_rot(mdab_s,ndab,nalt)) ; Emn_rot    = 0.0d0
+allocate(Emn_div(mdab_s,ndab,nalt)) ; Emn_div    = 0.0d0
+allocate(En_rot(ndab,nalt)) ; En_rot    = 0.0d0
+allocate(En_div(ndab,nalt)) ; En_div    = 0.0d0
 !allocate(Enmo(ndab,nalt)) ; Enmo    = 0.0d0
 !allocate(Ene(ndab-1,nalt)) ; Ene    = 0.0d0
 !allocate(Enmo_zm(ndab)) ; Enmo_zm    = 0.0d0
@@ -1536,6 +1717,8 @@ write(6,'(a)') "2D enstrophy and energy interaction terms for each day ..."
 do id = 1, nalt
   do n = 1, ndab-1
     Emn(:,n+1,id) = 0.25d0*ji_conversion(n+1)*(cmn_r(:,n+1,id)*cmn_r(:,n+1,id) + cmn_i(:,n+1,id)*cmn_i(:,n+1,id) + bmn_r(:,n+1,id)*bmn_r(:,n+1,id) + bmn_i(:,n+1,id)*bmn_i(:,n+1,id))
+    Emn_rot(:,n+1,id) = 0.25d0*ji_conversion(n+1)*(cmn_r(:,n+1,id)*cmn_r(:,n+1,id) + cmn_i(:,n+1,id)*cmn_i(:,n+1,id))
+    Emn_div(:,n+1,id) = 0.25d0*ji_conversion(n+1)*(bmn_r(:,n+1,id)*bmn_r(:,n+1,id) + bmn_i(:,n+1,id)*bmn_i(:,n+1,id))
   enddo
 enddo
 ! Emn(m,n) -> Mean in altitude
@@ -1554,9 +1737,13 @@ do id = 1, nalt
   ! n = 0 term
   En(1,id) = Emn(1,1,id)
   Enmo(1,id) = Emn(1,1,id)
+  En_rot(1,id) = Emn_rot(1,1,id)
+  En_div(1,id) = Emn_div(1,1,id)
   ! n > 0 terms
   do n = 1, ndab-1
     En(n+1,id) = Emn(1,n+1,id) + 2.0d0 * sum(Emn(2:n+1,n+1,id))
+    En_rot(n+1,id) = Emn_rot(1,n+1,id) + 2.0d0 * sum(Emn_rot(2:n+1,n+1,id))
+    En_div(n+1,id) = Emn_div(1,n+1,id) + 2.0d0 * sum(Emn_div(2:n+1,n+1,id))
     Enmo(n+1,id) = Emn(1,n+1,id)
     Ene(n+1,id) = 2.0d0 * sum(Emn(2:n+1,n+1,id))
   enddo
@@ -1644,6 +1831,74 @@ enddo
 print*,'epsilonf(iz) = ', epsilonf
 
 end subroutine epsilonforcage
+!###################################################################################################################
+!###################################################################################################################
+!#							 SUBROUTINES XII
+!#							     sorting:
+!#					               profil monotonization
+!###################################################################################################################
+!###################################################################################################################
+!******** Vorticite potentielle ***********************************
+!                  &
+!	     Monotonization
+!******************************************************************
+! Call a sorting function that: sorting(ndata,VtoSort,Vsorted,typeS,Idx)
+! if typeS == 1 ascendent sorting & typeS == 2 descendent sorting
+! The ascendent choice depend on the data order. The output are,
+! ndata: is the length of VtoSort(ndata)
+! Vtosort: is a single vector
+! Vsorted: is a vector once Vtosort sorted it has the same length
+! Idx: are index unsorted - index sorted --> typical sorted scale
+!******************************************************************
+subroutine sorting(nlat,VtoSort,Vsorted,typeS,L_Idx)
+    double precision, dimension (:), allocatable :: VtoSort,Vsorted
+    double precision :: t,tt
+    integer, dimension (nlat) :: Idx,IdxSorted,L_Idx
+    integer :: nlat,i,j,typeS
+
+! if typeS == 1 ascendent sorting & typeS == 2 descendent sorting
+!allocate(aa(nlat),dd(nlat)) ; 
+Vsorted = VtoSort 
+! generate indices
+do i  =1,nlat
+Idx(i)=i
+IdxSorted(i)=i
+enddo
+! arranging in increasing order
+if(typeS == 1)then
+do i=1,nlat
+   do j=i,nlat
+      if(Vsorted(i)>Vsorted(j))then
+	! sorted vector
+	t=Vsorted(j)
+	Vsorted(j)=Vsorted(i)
+	Vsorted(i)=t
+	! sorted indices
+	tt=IdxSorted(j)
+	IdxSorted(j)=IdxSorted(i)
+	IdxSorted(i)=tt
+      endif
+   enddo
+enddo
+! arranging in decreasing order
+elseif(typeS == 2)then
+do i=1,nlat
+   do j=i,nlat
+      if(Vsorted(i)<Vsorted(j))then
+	! sorted vector
+	t=Vsorted(j)
+	Vsorted(j)=Vsorted(i)
+	Vsorted(i)=t
+	! sorted indices
+	tt=IdxSorted(j)
+	IdxSorted(j)=IdxSorted(i)
+	IdxSorted(i)=tt
+      endif
+   enddo
+enddo
+endif
+L_Idx = Idx-IdxSorted
+end subroutine sorting
 !###################################################################################################################
 !######################################################################################################################
 !###################################################################################################################
