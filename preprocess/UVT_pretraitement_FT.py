@@ -28,8 +28,8 @@ import sys
 # -----
 # OUTPUTS :
 # a file uvData-FullTime-istep-XX-nstep-XXX-izX.nc with the velocity components
-# u and v, dsteps in days only indicative, time_counter is more 
-# precise time in seconds, lat, lon.
+# u and v, dsteps in days only indicative, time_counter (is a more 
+# precise time than dsteps and is in seconds), lat, lon.
 #*****************************************************************
 path = '/store/cabanes/CI018/TempSeries/'
 #-------------------------- PTS : Parameter To Set --

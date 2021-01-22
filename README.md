@@ -15,7 +15,7 @@ Steps
 
 On a:
 
-## I)------------------------------------FOR GENERAL STATISTICAL ANALYSIS
+## A)------------------------------------FOR GENERAL STATISTICAL ANALYSIS
 
 ZUVT_pretraitement_HV.py (->uvData-istep-x-nstep-xxx-niz-xx.nc)
 statistical_analysis_xyzt.f90 (->StatisticalData.nc) --> routine de travail de base.
@@ -30,14 +30,16 @@ background routines
 + LoadInfos.py		  --> Load les data from filePTS.zono.temp
 + filePTS.zono.temp	  --> Enter data of the specific simulation
 
-## II)------------------------------------FOR DISSIPATION SPECTRAL STUDIES
+## B)------------------------------------FOR DISSIPATION SPECTRAL STUDIES
 ZUVT_pretraitement_dissip.py 
 statistical_analysis_dissip.f90 (->StatisticalData.nc) --> il y a egalement une sortie avec des spectres des donnees de dissipation
 
-## III)------------------------------------TEMPORAL SERIES
-1. CropData-FT --> A bash code to extract selected variable to a Xhistins_X.nc 
-file, here we select u[:,iz,::],v[:,iz,::],time_counter,lat,lon.
-2. UVT_pretraitement_FT.py (->uvData-FullTime-istep-XX-nstep-XXX-iz-X.nc)
+## C)------------------------------------TEMPORAL SERIES
+1. CropData-FT (->Xhistins_X-uvtizX.nc) A bash code to extract selected variable to 
+a Xhistins_X.nc file to create a reduced file Xhistins_X-uvtizX.nc with selected 
+variables u[:,iz,::],v[:,iz,::],time_counter,lat,lon.
+2. UVT_pretraitement_FT.py (->uvData-FullTime-istep-XX-nstep-XXX-iz-X.nc) concatenate
+all reduced Xhistins_X-uvtizX.nc into a single file.
 
 or
 
