@@ -1,0 +1,22 @@
+#!/bin/bash
+# ---------- Value to select:
+iz=7
+initx=50
+endx=60
+#----------- Set array and loop to crop:
+array=()
+idx=0
+for ((x=initx;x<=endx;x+=1))
+do
+echo $x
+ncks -O -x -v temperature,ISR,OLR,area,ls,omega,ps -F -d altitude,$iz ../Xhistins_$x.nc Xhistins_$x-uvtiz$iz.nc
+array[idx]=$x
+idx=$((idx+1))
+done
+
+echo 'Crop data done, here is the list of Xhistins_ file to concatenate:' 
+echo ${array[*]}
+#echo Xhistins_[${array[*]}]-uvtiz$iz.nc
+#echo Xhistins_[$initx$endx]-uvtiz$iz.nc
+
+#ncrcat Xhistins_[${array[0]}${array[1]}${array[2]}]-uvtiz$iz.nc Xhistins_${array[0]}-to-${array[2]}-uvtiz$iz.nc
