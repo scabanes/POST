@@ -161,6 +161,9 @@ end if
  allocate(dsteps_DYN(ntime))
  call check( nf90_inq_varid(idfile,trim('dsteps'),iddsteps))
  call check( nf90_get_var(idfile,iddsteps,dsteps_DYN,(/1/),(/ntime/)) ) !(it)
+
+print*,'--------------------------------------time_counter'
+print*,(time_counter_DYN(2:10)-time_counter_DYN(1:9))
 !###################################################################################################################
 !=================================================================================================================== 
 !						     forcage
@@ -212,7 +215,7 @@ if(NetcdefStatData == 1) then
   call check( nf90_def_var(ncidF, "lon", NF90_DOUBLE, lon_dimid, lonid))
   call check( nf90_def_var(ncidF, "lat", NF90_DOUBLE, lat_dimid, latid))
   call check( nf90_def_var(ncidF, "altitude", NF90_DOUBLE, alt_dimid, altid))
-  call check( nf90_def_var(ncidF, "time_counter", NF90_REAL4, t_dimid, tid))
+  call check( nf90_def_var(ncidF, "time_counter", NF90_DOUBLE, t_dimid, tid))
  ! call check( nf90_def_var(ncidF, "colat", NF90_DOUBLE, lat_dimid, colatid))
 ! champ 1d
  ! call check( nf90_def_var(ncidF, "Enmo", NF90_DOUBLE, dimids_3d, En_zmid)) 		!--------------------------temporellement suprime
@@ -253,7 +256,7 @@ if(NetcdefStatData == 1) then
 !  call check( NF90_PUT_ATT  (ncidF, Urmsid, "_FillValue", NF90_FILL_DOUBLE) )
 !time dimension
  ! call check( NF90_PUT_ATT  (ncidF, dstepsid, "_FillValue", NF90_FILL_DOUBLE) )
-  call check( NF90_PUT_ATT  (ncidF, tid, "_FillValue", NF90_FILL_REAL4) )
+  call check( NF90_PUT_ATT  (ncidF, tid, "_FillValue", NF90_FILL_DOUBLE) )
   call check( NF90_PUT_ATT  (ncidF, ETid, "_FillValue", NF90_FILL_DOUBLE) )
   call check( NF90_PUT_ATT  (ncidF, EZid, "_FillValue", NF90_FILL_DOUBLE) )
   call check( NF90_PUT_ATT  (ncidF, ERid, "_FillValue", NF90_FILL_DOUBLE) )
@@ -675,6 +678,8 @@ if(NetcdefStatData == 1) then
     First_reading = .false.
   end if
 !champ 2d
+   print*, '-----------------------------------------ici'
+   print*, time_counter_DYN(it+1)-time_counter_DYN(it)
    call check( nf90_put_var( ncidF, tid, time_counter_DYN(it), start=(/it/) ) )
   ! call check( nf90_put_var( ncidF, wmid, wm3d,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) !----Cosi
   ! call check( nf90_put_var( ncidF, vmid, vm3d,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) !----Cosi
