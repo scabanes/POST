@@ -161,9 +161,6 @@ end if
  allocate(dsteps_DYN(ntime))
  call check( nf90_inq_varid(idfile,trim('dsteps'),iddsteps))
  call check( nf90_get_var(idfile,iddsteps,dsteps_DYN,(/1/),(/ntime/)) ) !(it)
-
-print*,'--------------------------------------time_counter'
-print*,(time_counter_DYN(2:10)-time_counter_DYN(1:9))
 !###################################################################################################################
 !=================================================================================================================== 
 !						     forcage
@@ -268,7 +265,6 @@ if(NetcdefStatData == 1) then
   call check( NF90_PUT_ATT  (ncidF, sfid, "_FillValue", NF90_FILL_DOUBLE) ) !----Cosi
  ! call check( NF90_PUT_ATT  (ncidF, Emnid, "_FillValue", NF90_FILL_DOUBLE) ) 		!--------------------------temporellement suprime
   call check( NF90_PUT_ATT  (ncidF, sf_rid, "_FillValue", NF90_FILL_DOUBLE) ) !----Cosi
-
 
   call check( nf90_enddef(ncidF) )
 end if
@@ -678,8 +674,6 @@ if(NetcdefStatData == 1) then
     First_reading = .false.
   end if
 !champ 2d
-   print*, '-----------------------------------------ici'
-   print*, time_counter_DYN(it+1)-time_counter_DYN(it)
    call check( nf90_put_var( ncidF, tid, time_counter_DYN(it), start=(/it/) ) )
   ! call check( nf90_put_var( ncidF, wmid, wm3d,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) !----Cosi
   ! call check( nf90_put_var( ncidF, vmid, vm3d,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) !----Cosi
