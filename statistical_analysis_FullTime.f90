@@ -37,13 +37,13 @@ integer :: mdab_v,mdab_s,mdab_smaller
 double precision, dimension(:,:), allocatable :: uoff_f,voff_f,fvm,fwm,uoff,voff,vm,wm,fbr,fbi,fcr,fci
 double precision, dimension(:,:,:), allocatable :: vm3d,wm3d,u_DYN,v_DYN,UvectVT_lon,UvectVT_lat,u_rot,v_rot,u_div,v_div,udotu,vgrad,wgrad,vgradN,wgradN
 double precision, dimension(:,:), allocatable :: fu,fv,rotuwP
-double precision, dimension (:), allocatable :: lat_DYN,lon_DYN,alt_DYN,colat_DYN,dsteps_DYN,lat_SP,lon_SP,colat_SP,epsilonf
+double precision, dimension (:), allocatable :: time_counter_DYN,lat_DYN,lon_DYN,alt_DYN,colat_DYN,dsteps_DYN,lat_SP,lon_SP,colat_SP,epsilonf
 double precision, dimension(:,:,:), allocatable ::  br,bi,cr,ci,Fdivuwr,Fdivuwi,Frotuwr,Frotuwi,Jmn,uur,uui,bbr,bbi,ccr,cci,ar,ai,divgraduur,divgraduui,rotgraduur,rotgraduui,div2_ugradu_r,div2_ugradu_i
 character (len=100) :: file_netcdf,file_spectra,nickname
-integer :: idfile,ncidF,ierror,idu,idv,idlat,idlon,idalt,idvw,jdvw,mdab,ndab,ivrt,jvrt,mdc,ndc,nt=1,ityp=0,isym=0,ioff,fgg,lon_dimid,lat_dimid,alt_dimid,t_dimid,wmid,vmid,vortid,Emnid,sf_rid, dimid3s(4),dimids(4),dimids_1d(2),dimids_2d(3),dimids_3d(3), dimids_alttime(2), idvti,idfile2,idtime,idnlon,idnlat,idnalt,iddsteps,idSu,fuid,fvid,urotid,vrotid,udivid,vdivid
+integer :: idfile,ncidF,ierror,idu,idv,idlat,idlon,idalt,idvw,jdvw,mdab,ndab,ivrt,jvrt,mdc,ndc,nt=1,ityp=0,isym=0,ioff,fgg,lon_dimid,lat_dimid,alt_dimid,t_dimid,wmid,vmid,vortid,sfid,Emnid,sf_rid, dimid3s(4),dimids(4),dimids_1d(2),dimids_2d(3),dimids_3d(3), dimids_alttime(2), idvti,idfile2,idtime,idnlon,idnlat,idnalt,iddsteps,idSu,fuid,fvid,urotid,vrotid,udivid,vdivid
 integer :: i,j,it,itt,in,jm,ig,l1,ll1,l2,vlwork,lvhsec,lwwork,llwwork,sldwork
 double precision, dimension (:), allocatable :: work,ddwork,vwork
-double precision, dimension (:,:,:), allocatable :: vm_3D,wm_3D,vt_3D
+double precision, dimension (:,:,:), allocatable :: vm_3D,wm_3D,vt_3D,vt,sf,vp
 real(16), parameter :: PI=4.D0*DATAN(1.D0)
 
 !###################################################################################################################
@@ -144,15 +144,18 @@ end if
  call check( nf90_inquire_dimension(idfile,idnlat,tmp_char,nlat))
  call check( nf90_inquire_dimension(idfile,idnalt,tmp_char,nalt))
 
- call check( nf90_inq_varid(idfile,trim('lat'),idlat))
+ call check( nf90_inq_varid(idfile,trim('time_counter'),idtime))
  call check( nf90_inq_varid(idfile,trim('lon'),idlon))
+ call check( nf90_inq_varid(idfile,trim('lat'),idlat))
  call check( nf90_inq_varid(idfile,trim('altitude'),idalt))
 
- allocate(lat_DYN(nlat))
+ allocate(time_counter_DYN(ntime))
  allocate(lon_DYN(nlon))
+ allocate(lat_DYN(nlat))
  allocate(alt_DYN(nalt))
- call check( nf90_get_var(idfile,idlat,lat_DYN,(/1/),(/nlat/)) ) !(lon,lat,iz,it)
+ call check( nf90_get_var(idfile,idtime,time_counter_DYN,(/1/),(/ntime/)) ) !(lon,lat,iz,it)
  call check( nf90_get_var(idfile,idlon,lon_DYN,(/1/),(/nlon/)) ) !(lon,lat,iz,it)
+ call check( nf90_get_var(idfile,idlat,lat_DYN,(/1/),(/nlat/)) ) !(lon,lat,iz,it)
  call check( nf90_get_var(idfile,idalt,alt_DYN,(/1/),(/nalt/)) ) !(lon,lat,iz,it)
 
  allocate(dsteps_DYN(ntime))
@@ -195,10 +198,10 @@ if(NetcdefStatData == 1) then
 ! ---------------------------DEFINITION OF DIMENSIONS
   !call check( nf90_create("StatisticalData.nc", NF90_CLOBBER, ncid))
   call check( nf90_create(path="StatisticalData-FullTime.nc", cmode=or(nf90_clobber,nf90_64bit_offset),ncid=ncidF))
-  call check( nf90_def_dim(ncidF, "nlon", nlon, lon_dimid))
-  call check( nf90_def_dim(ncidF, "nlat", nlat+1, lat_dimid))  !!!!! to change
-  call check( nf90_def_dim(ncidF, "nalt", nalt, alt_dimid))
-  call check( nf90_def_dim(ncidF, "time", mt, t_dimid))
+  call check( nf90_def_dim(ncidF, "lon", nlon, lon_dimid))
+  call check( nf90_def_dim(ncidF, "lat", nlat+1, lat_dimid))  !!!!! to change
+  call check( nf90_def_dim(ncidF, "altitude", nalt, alt_dimid))
+  call check( nf90_def_dim(ncidF, "time_counter", mt, t_dimid))
   dimids =  (/ lat_dimid, lon_dimid, alt_dimid, t_dimid /)!
   dimid3s =  (/ lat_dimid, lat_dimid, alt_dimid, t_dimid /)!
   dimids_2d =  (/ lat_dimid, lon_dimid, t_dimid /)!
@@ -209,8 +212,8 @@ if(NetcdefStatData == 1) then
   call check( nf90_def_var(ncidF, "lon", NF90_DOUBLE, lon_dimid, lonid))
   call check( nf90_def_var(ncidF, "lat", NF90_DOUBLE, lat_dimid, latid))
   call check( nf90_def_var(ncidF, "altitude", NF90_DOUBLE, alt_dimid, altid))
-  call check( nf90_def_var(ncidF, "time", NF90_REAL4, t_dimid, tid))
-  call check( nf90_def_var(ncidF, "colat", NF90_DOUBLE, lat_dimid, colatid))
+  call check( nf90_def_var(ncidF, "time_counter", NF90_REAL4, t_dimid, tid))
+ ! call check( nf90_def_var(ncidF, "colat", NF90_DOUBLE, lat_dimid, colatid))
 ! champ 1d
  ! call check( nf90_def_var(ncidF, "Enmo", NF90_DOUBLE, dimids_3d, En_zmid)) 		!--------------------------temporellement suprime
  ! call check( nf90_def_var(ncidF, "Ene", NF90_DOUBLE, dimids_3d, Enid))	   	!--------------------------temporellement suprime
@@ -221,17 +224,18 @@ if(NetcdefStatData == 1) then
  ! call check( nf90_def_var(ncidF, "fn", NF90_DOUBLE, dimids_3d, fnid))
  ! call check( nf90_def_var(ncidF, "hn", NF90_DOUBLE, dimids_3d, hnid))
 ! alt & time
-  call check( nf90_def_var(ncidF, "Urms", NF90_DOUBLE, dimids_alttime, Urmsid))
+!  call check( nf90_def_var(ncidF, "Urms", NF90_DOUBLE, dimids_alttime, Urmsid))
 ! time dimension
-  call check( nf90_def_var(ncidF, "dsteps", NF90_DOUBLE, t_dimid, dstepsid))
+ ! call check( nf90_def_var(ncidF, "dsteps", NF90_DOUBLE, t_dimid, dstepsid))
   call check( nf90_def_var(ncidF, "ET", NF90_DOUBLE, t_dimid, ETid))
   call check( nf90_def_var(ncidF, "EZ", NF90_DOUBLE, t_dimid, EZid))
   call check( nf90_def_var(ncidF, "ER", NF90_DOUBLE, t_dimid, ERid))
-  call check( nf90_def_var(ncidF, "epsilonf", NF90_DOUBLE, t_dimid, epsilonfid))
+ ! call check( nf90_def_var(ncidF, "epsilonf", NF90_DOUBLE, t_dimid, epsilonfid))
 ! champ 2d
  ! call check( nf90_def_var(ncidF, "wm", NF90_DOUBLE, dimids, wmid)) !----Cosi
  ! call check( nf90_def_var(ncidF, "vm", NF90_DOUBLE, dimids, vmid)) !----Cosi
  ! call check( nf90_def_var(ncidF, "vort", NF90_DOUBLE, dimids, vortid)) !----Cosi
+  call check( nf90_def_var(ncidF, "sf", NF90_DOUBLE, dimids, sfid)) !----Cosi
  ! call check( nf90_def_var(ncidF, "Emn", NF90_DOUBLE, dimid3s, Emnid)) 		!--------------------------temporellement suprime
   call check( nf90_def_var(ncidF, "sf_r", NF90_DOUBLE, dimid3s, sf_rid)) !----Cosi
 
@@ -246,18 +250,19 @@ if(NetcdefStatData == 1) then
  ! call check( NF90_PUT_ATT  (ncidF, fnid, "_FillValue", NF90_FILL_DOUBLE) )
  ! call check( NF90_PUT_ATT  (ncidF, hnid, "_FillValue", NF90_FILL_DOUBLE) )
 ! alt & time
-  call check( NF90_PUT_ATT  (ncidF, Urmsid, "_FillValue", NF90_FILL_DOUBLE) )
+!  call check( NF90_PUT_ATT  (ncidF, Urmsid, "_FillValue", NF90_FILL_DOUBLE) )
 !time dimension
-  call check( NF90_PUT_ATT  (ncidF, dstepsid, "_FillValue", NF90_FILL_DOUBLE) )
+ ! call check( NF90_PUT_ATT  (ncidF, dstepsid, "_FillValue", NF90_FILL_DOUBLE) )
+  call check( NF90_PUT_ATT  (ncidF, tid, "_FillValue", NF90_FILL_REAL4) )
   call check( NF90_PUT_ATT  (ncidF, ETid, "_FillValue", NF90_FILL_DOUBLE) )
   call check( NF90_PUT_ATT  (ncidF, EZid, "_FillValue", NF90_FILL_DOUBLE) )
   call check( NF90_PUT_ATT  (ncidF, ERid, "_FillValue", NF90_FILL_DOUBLE) )
-  call check( NF90_PUT_ATT  (ncidF, epsilonfid, "_FillValue", NF90_FILL_DOUBLE) )
+ ! call check( NF90_PUT_ATT  (ncidF, epsilonfid, "_FillValue", NF90_FILL_DOUBLE) )
 ! champ 2d
-  call check( NF90_PUT_ATT  (ncidF, tid, "_FillValue", NF90_FILL_REAL4) )
  ! call check( NF90_PUT_ATT  (ncidF, wmid, "_FillValue", NF90_FILL_DOUBLE) ) !----Cosi
  ! call check( NF90_PUT_ATT  (ncidF, vmid, "_FillValue", NF90_FILL_DOUBLE) ) !----Cosi
  ! call check( NF90_PUT_ATT  (ncidF, vortid, "_FillValue", NF90_FILL_DOUBLE) ) !----Cosi
+  call check( NF90_PUT_ATT  (ncidF, sfid, "_FillValue", NF90_FILL_DOUBLE) ) !----Cosi
  ! call check( NF90_PUT_ATT  (ncidF, Emnid, "_FillValue", NF90_FILL_DOUBLE) ) 		!--------------------------temporellement suprime
   call check( NF90_PUT_ATT  (ncidF, sf_rid, "_FillValue", NF90_FILL_DOUBLE) ) !----Cosi
 
@@ -443,8 +448,13 @@ allocate(vp_r  (mdab_s,ndab,nalt)) ; vp_r   = 0.0d0
 allocate(vp_i  (mdab_s,ndab,nalt)) ; vp_i   = 0.0d0
 !-----------------------------------------------------------------
 do n = 1, ndab-2
+!*********************************************************************
   ! Scaling factor
   ! Need to divide through by radius as gradient operator is on unit sphere  
+  ! Here e.g. vort_r/i = n(n+1)^1/2 * cr/i /R and the streamfunction
+  ! being vort = Laplacian sf, we have:
+  !  n(n+1)^1/2 * cr/i * 1/R = -n(n+1)/R^2 sf_r/i and we can obtain the 
+  ! streamfunction coefficients from sf_r/i = - R/n(n+1)^1/2.
   factor = sqrt(1.0d0 * n * (n+1.0d0)) / radius
 !*********************************************************************
 !-----------------------  FORCAGE FIELD 2D
@@ -482,11 +492,43 @@ end do
 !******************************************************************
 ! Synthesis of the vorticity coefficients to obtain the vorticity:
 ! vt(i,j) =  [-dv/dlambda + d(sint*w)/dtheta]/sint sur une sphere
-! de rayon unite avec 1/raidus pour avoir la vorticite voir 
+! de rayon unite avec 1/radius pour avoir la vorticite voir 
 ! coeffs vort_r et vort_i.
 !******************************************************************
 allocate(vort(nlat,nlon,nalt)) ; vort = 0.0d0
- !call SHS(nlon,nlat,nalt,isym,vort,mdab_s,ndab,vort_r,vort_i) 					!--------------------RECONNECTER
+! call SHS(nlon,nlat,nalt,isym,vort,mdab_s,ndab,vort_r,vort_i) 					!--------------------RECONNECTER
+
+! -----------------------------------VORTICITY 2 (equivalent)
+!allocate(vt(nlat,nlon,nalt)) ; vt(:,:,:) = 0.0d0
+! cr = cr/radius ! -> better define another variable
+! ci = ci/radius ! -> better define another variable
+! call curl(nlon,nlat,nalt,isym,vt,cr,ci)
+!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+!						  Stream function (sf) & Velocity potential (vp):
+!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+!******************************************************************
+! Synthesis of the vorticity coefficients to obtain the Streamfunction:
+! v = -1/sint*d(vp)/dlambda + d(sf)/dtheta
+! w =  1/sint*d(sf)/dlambda + d(vp)/dtheta sur une sphere
+! de rayon unite avec *radius pour avoir la bonne unite.
+!******************************************************************
+allocate(sf(nlat,nlon,nalt)) ; sf = 0.0d0
+ call SHS(nlon,nlat,nalt,isym,sf,mdab_s,ndab,sf_r,sf_i) 					!--------------------RECONNECTER
+allocate(vp(nlat,nlon,nalt)) ; vp = 0.0d0
+ !call SHS(nlon,nlat,nalt,isym,vp,mdab_s,ndab,vp_r,vp_i) 					!--------------------RECONNECTER
+
+! -----------------------------------StreamFunction 2 (equivalent)
+!allocate(sf(nlat,nlon,nalt)) ; sf(:,:,:) = 0.0d0
+!allocate(vp(nlat,nlon,nalt)) ; vp(:,:,:) = 0.0d0
+! cr = cr*radius ! -> better define another variable
+! ci = ci*radius ! -> better define another variable
+! br = br*radius ! -> better define another variable
+! bi = bi*radius ! -> better define another variable
+! call SFVP(nlon,nlat,nalt,isym,sf,vp,cr,ci,br,bi)
+!------------ to retrieve sf_r and sf_i = ar and ai one can do:
+!allocate(ar(mdab_s,ndab,nalt)) ; ar(:,:,:) = 0.0d0
+!allocate(ai(mdab_s,ndab,nalt)) ; ai(:,:,:) = 0.0d0
+! call SSA(nlon,nlat,nalt,ityp,mdab_s,ndab,sf,ar,ai)
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 !							Rotational & divergent velocities vector:
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -628,15 +670,16 @@ if(NetcdefStatData == 1) then
     call check( NF90_PUT_VAR (ncidF, lonid, lon_SP) )
     call check( NF90_PUT_VAR (ncidF, latid, lat_SP) )
     call check( NF90_PUT_VAR (ncidF, altid, alt_DYN) )
-    call check( NF90_PUT_VAR (ncidF, colatid, colat_SP) )
+   ! call check( NF90_PUT_VAR (ncidF, colatid, colat_SP) )
   else
     First_reading = .false.
   end if
 !champ 2d
-   call check( nf90_put_var( ncidF, tid, it, start=(/it/) ) )
+   call check( nf90_put_var( ncidF, tid, time_counter_DYN(it), start=(/it/) ) )
   ! call check( nf90_put_var( ncidF, wmid, wm3d,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) !----Cosi
   ! call check( nf90_put_var( ncidF, vmid, vm3d,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) !----Cosi
   ! call check( nf90_put_var( ncidF, vortid, vort,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) !----Cosi
+   call check( nf90_put_var( ncidF, sfid, sf,(/1,1,1,it/),(/nlat,nlon,nalt,1/) ) ) !----Cosi
   ! call check( nf90_put_var( ncidF, Emnid, Emn,(/1,1,1,it/),(/nlat,nlat,nalt,1/) ) ) 			!--------------------------temporellement suprime
    call check( nf90_put_var( ncidF, sf_rid, sf_r,(/1,1,1,it/),(/nlat,nlat,nalt,1/) ) ) !----Cosi
 
@@ -654,13 +697,13 @@ if(NetcdefStatData == 1) then
   ! call check( nf90_put_var( ncidF, fnid, fn,(/1,1,it/),(/nlat,nalt,1/) ) )
   ! call check( nf90_put_var( ncidF, hnid, hn,(/1,1,it/),(/nlat,nalt,1/) ) )
 
-   call check( nf90_put_var( ncidF, Urmsid, Urms,(/1,it/),(/nalt,1/) ) )
+  ! call check( nf90_put_var( ncidF, Urmsid, Urms,(/1,it/),(/nalt,1/) ) )
 !time dimension
-   call check( nf90_put_var( ncidF, dstepsid, dsteps_DYN(it), start=(/it/) ) )
+  ! call check( nf90_put_var( ncidF, dstepsid, dsteps_DYN(it), start=(/it/) ) )
    call check( nf90_put_var( ncidF, ETid, ET, start=(/it/) ) )
    call check( nf90_put_var( ncidF, EZid, EZ, start=(/it/) ) )
    call check( nf90_put_var( ncidF, ERid, ER, start=(/it/) ) )
-   call check( nf90_put_var( ncidF, epsilonfid, epsilonf_zm, start=(/it/) ) )
+  ! call check( nf90_put_var( ncidF, epsilonfid, epsilonf_zm, start=(/it/) ) )
 
    !call check( nf90_put_var( ncidF, ERid, ER,(/it/),(/1/) ) )
    !call check( nf90_put_var( ncidF, EZid, EZ,(/it/),(/1/) ) )
@@ -712,6 +755,8 @@ deallocate(sf_r)
 deallocate(sf_i)  
 deallocate(vp_r) 
 deallocate(vp_i)
+deallocate(sf)
+deallocate(vp)
 deallocate(vortv)
 deallocate(vortu)
 deallocate(vort)
@@ -912,7 +957,7 @@ subroutine curl(nlon,nlat,nt,isym,rot,cr,ci)
     implicit none
     integer :: nlon,nlat,ll1,l1,l2,lshsec,lldwork,ierror,nt,isym,ivrt,jvrt,mdc,ndc,vlwork
     double precision, dimension (:), allocatable :: wshsec,ddwork,vwork
-    double precision, dimension(:,:), allocatable :: rot,cr,ci
+    double precision, dimension(:,:,:), allocatable :: rot,cr,ci
 !************************************************************
 ! The vorticity field is obtained from cr and ci coefficients 
 ! of the rotational part of the wind field. It is important
@@ -961,7 +1006,7 @@ end if
 ndc = nlat
 if (mod(nlon,2) == 0) then
   !l1 = min(nlat,nlon/2) 
-  l1 = min(nlat,(nlon+2)/2) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! attention pas bon ici
+  l1 = min(nlat,(nlon+2)/2) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! attention erreure dans le doc spherpack
 else
   l1 = min(nlat,(nlon+1)/2) 
 end if
@@ -1006,6 +1051,115 @@ select case (ierror)
     print*,'vrtec: ERROR on lwork'
 end select
 end subroutine curl
+!###################################################################################################################
+!###################################################################################################################
+!#							 SUBROUTINES III bis
+!#							       SFVP:
+!#						  StreamFunction & Velocity Potential
+!###################################################################################################################
+!###################################################################################################################
+! ---------- sfvp
+subroutine SFVP(nlon,nlat,nt,isym,sf,vp,cr,ci,br,bi)
+    implicit none
+    integer :: nlon,nlat,ll1,l1,l2,lshsec,lldwork,ierror,nt,isym,idv,jdv,mdc,ndc,vlwork
+    double precision, dimension (:), allocatable :: wshsec,ddwork,vwork
+    double precision, dimension(:,:,:), allocatable :: sf,vp,cr,ci,br,bi
+!************************************************************
+! Streamfunction and velocity potential are computed given the 
+! vector spherical harmonic coefficients br,bi,cr,ci, computed 
+! by subroutine vhaec for a vector field (v,w), sfvpec computes 
+! a scalar stream function sf and scalar velocity potential vp 
+! for (v,w).  (v,w) is expressed in terms of sf and vp by the 
+! helmholtz relations (in mathematical spherical coordinates):
+!	 v = -1/sint*d(vp)/dlambda + d(sf)/dtheta
+!	 w =  1/sint*d(sf)/dlambda + d(vp)/dtheta
+! with sf(i,j) and vp(i,j) maps.
+!*********************************************************shseci function (initialisations for Vhaec function)
+if (mod(nlon,2) == 0) then ! check if it is even
+  ll1 = min(nlat,(nlon+2)/2)
+else
+  ll1 = min(nlat,(nlon+1)/2)
+end if
+if (mod(nlat,2) == 0) then
+  l2 = nlat/2
+else
+  l2 = (nlat+1)/2
+end if
+lshsec=2*nlat*l2+3*((ll1-2)*(nlat+nlat-ll1-1))/2+nlon+15
+allocate(wshsec(lshsec))
+wshsec(:) = 0.
+lldwork=nlat+1
+allocate(ddwork(lldwork))
+ddwork(:) = 0.
+ierror=3
+call shseci(nlat,nlon,wshsec,lshsec,ddwork,lldwork,ierror)
+select case (ierror)
+  case(0) 
+    print*,'shseci: No ERROR in subroutine'
+  case(1) 
+    print*,'shseci: ERROR on nlat'
+  case(2) 
+    print*,'shseci: ERROR on nlong'
+  case(3) 
+    print*,'shseci: ERROR on lvhaec'
+  case(4) 
+    print*,'shseci: ERROR on ldwork'
+end select
+!**********sfvpec function (computes the vorticity)	
+idv = nlat
+jdv = nlon
+if (mod(nlon,2) == 0) then
+  mdc=min(nlat,nlon/2)
+else
+  mdc=min(nlat,(nlon+1)/2)
+end if
+ndc = nlat
+if (mod(nlon,2) == 0) then 
+  l1 = min(nlat,(nlon+2)/2)
+else
+  l1 = min(nlat,(nlon+1)/2) 
+end if
+if (mod(nlat,2) == 0) then
+  l2 = nlat/2
+else
+  l2 = (nlat+1)/2
+end if
+!
+if (isym == 0) then
+  vlwork = nlat*(nt*nlon+max(3*l2,nlon) + 2*nt*l1+1)
+else
+  vlwork = l2*(nt*nlon+max(3*nlat,nlon)) + nlat*(2*nt*l1+1)
+end if
+allocate(vwork(vlwork))
+vwork(:) = 0.
+ierror = 3
+call sfvpec(nlat,nlon,isym,nt,sf,vp,idv,jdv,br,bi,cr,ci,mdc,ndc,wshsec,lshsec,vwork,vlwork,ierror)
+!**********End sfvpec
+select case (ierror)
+  case(0) 
+    print*,'sfvpec: No error'
+  case(1) 
+    print*,'sfvpec: ERROR on nlat'
+  case(2) 
+    print*,'sfvpec: ERROR on nlong'
+  case(3) 
+    print*,'sfvpec: ERROR on ityp'
+  case(4) 
+    print*,'sfvpec: ERROR on nt'
+  case(5) 
+    print*,'sfvpec: ERROR on idvw'
+  case(6) 
+    print*,'sfvpec: ERROR on jdvw'
+  case(7) 
+    print*,'sfvpec: ERROR on mdab'
+  case(8) 
+    print*,'sfvpec: ERROR on ndab'
+  case(9) 
+    print*,'sfvpec: ERROR on lvhaec'
+  case(10) 
+    print*,'sfvpec: ERROR on lwork'
+end select
+end subroutine SFVP
 !###################################################################################################################
 !###################################################################################################################
 !#							 SUBROUTINES IV
@@ -1074,7 +1228,7 @@ deallocate(work)
 end subroutine VSA
 !###################################################################################################################
 !###################################################################################################################
-!#							 SUBROUTINES IV
+!#							 SUBROUTINES IV bis
 !#							       VSA2D:
 !#						    Vector Spectral Analysis 2D
 !###################################################################################################################
@@ -1150,7 +1304,7 @@ subroutine SSA(nlon,nlat,nt,ityp,mdab,ndab,sf,ar,ai)
     implicit none
     integer :: nlon,nlat,ll1,l2,nt,ierror,ityp,idvw,jdvw,mdab,ndab,lshaec,sldwork,sslwork
     double precision, dimension (:), allocatable :: wshaec,sdwork,sswork
-    double precision, dimension(:,:), allocatable :: ar,ai,sf
+    double precision, dimension(:,:,:), allocatable :: ar,ai,sf
 !**********Shaeci function (initialisations for Shaec function)
 if (mod(nlon,2) == 0) then
   ll1 = min(nlat,(nlon+2)/2)

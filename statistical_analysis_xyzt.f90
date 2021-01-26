@@ -533,8 +533,13 @@ allocate(vp_r  (mdab_s,ndab,nalt)) ; vp_r   = 0.0d0
 allocate(vp_i  (mdab_s,ndab,nalt)) ; vp_i   = 0.0d0
 !-----------------------------------------------------------------
 do n = 1, ndab-2
+!*********************************************************************
   ! Scaling factor
   ! Need to divide through by radius as gradient operator is on unit sphere  
+  ! Here e.g. vort_r/i = n(n+1)^1/2 * cr/i /R and the streamfunction
+  ! being vort = Laplacian sf, we have:
+  !  n(n+1)^1/2 * cr/i * 1/R = -n(n+1)/R^2 sf_r/i and we can obtain the 
+  ! streamfunction coefficients from sf_r/i = - R/n(n+1)^1/2. 
   factor = sqrt(1.0d0 * n * (n+1.0d0)) / radius
 !*********************************************************************
 !-----------------------  FORCAGE FIELD 2D
