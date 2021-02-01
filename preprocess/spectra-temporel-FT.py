@@ -10,48 +10,55 @@ import FourierTransform1D
 ############################################################################################
 # 		    PTS: "Parameters to set"
 ############################################################################################
-zefile = 'StatisticalData-FullTime-10000.nc'
+zefile = 'StatisticalData-FullTime.nc'
 #---------------------------------------------------------------Mode azimutaux
 im = 3 		# indice en longitude
 #---------------------------------------------------------------Moyenne glissee en temps & truncation
-nbT = 1000 	# -nbT de donnees enleve a la fin du signal
+nbT = 3 	# -nbT de donnees enleve a la fin du signal
 Tstep = 1 	# time step pour la moyenne glisse
 #---------------------------------------------------------------for multiple value of l
-nbn = 30 	# va jusqu a l indice nbl
+nbn = 3 	# va jusqu a l indice nbl
 omega_sat = 0.000165121 #rad.s-1
+JourSaturn_s = 118.9125*320# jour saturne en seconde est dt=118.9125 fois 320 le nombre de pas en temps pour faire une journee ~(2*pi)/0.000165121 = 38052,00614809
 ############################################################################################
 # 		    Load Data
 ############################################################################################
-UneAnneeSaturne = 10756.907 # en Jour
-ptimestep= 3805.2 # time step en seconde entre chaque injection
-UneJourneeSecd = ptimestep*10. # j injecte tout les 1/10 jour
+#ptimestep= 3805.2 # time step en seconde entre chaque injection
 # ..........LOAD data from StatisticalData.nc
 nc = NetCDFFile(zefile) # load file
-ET = nc.variables['ET'][:-1000] #[time]
-dsteps = nc.variables['dsteps'][:-1000] #[time]
-epsilonf = nc.variables['epsilonf'][:-1000] #[time]
+ET = nc.variables['ET'][:] #[time]
+#dsteps = nc.variables['dsteps'][:-1000] #[time]
+time_counter = nc.variables['time_counter'][:] #[time]
+#epsilonf = nc.variables['epsilonf'][:-1000] #[time]
 #............SIGNAL TOTAL LENGTH
-L_T = (dsteps[-1]-dsteps[0])*UneJourneeSecd
-N_T = len(dsteps)
+L_T = (time_counter[-1]-time_counter[0])
+N_T = len(time_counter)
 print '..........................INITIAL SIGNAL LENGTH'
 print 'Signal length : ',N_T 
-print 'Signal length in days : ',L_T/UneJourneeSecd
+print 'Signal length in days : ',L_T/JourSaturn_s
 print 'Signal length in second : ',L_T
 #............SIGNAL USED FOR FFT
-L_T = (dsteps[-nbT]-dsteps[0])*UneJourneeSecd
-N_T = len(dsteps[:-nbT])
+LL_T = (time_counter[0:-nbT+0]-time_counter[0])# exclude the value -nbT
+L_T = LL_T[-1]
+N_T = len(time_counter[0:-nbT+0])
 #FFT_YTuk= np.zeros([N_T/2+1,nbT])
 print '..........................LENGTH USED FOR FFT'
 print 'Signal length : ',N_T 
-print 'Signal length in days : ',L_T/UneJourneeSecd
+print 'Signal length in days : ',L_T/JourSaturn_s
 print 'Signal length in second : ',L_T
+############################################################################################
+#sf_r = nc.variables['sf_r'][:-nbT,0,1,0] #[t,z,n,m]
+#print sf_r.shape
+#(sfr_Tuk) = windowing.WindowingTukey(sf_r,N_T,L_T,1 )#BLM_t[l,m,t]
+#( FFT_YTuk,E_YTuk[:,iz,it],modes ) = FourierTransform1D.fft1D ( sfr_Tuk, N_T )
+#exit()
 ############################################################################################
 # 		    WRITE NETCEDEF
 ############################################################################################
 # get dimensions from netCDF file
 zedim = nc.dimensions.keys()
-xcoord = zedim[0]
-ycoord = zedim[1]
+loncoord = zedim[0]
+latcoord = zedim[1]
 zcoord = zedim[2]
 tcoord = zedim[3]
 fcoord = "fq"
@@ -59,8 +66,6 @@ mcoord = "m"
 ncoord = "n"
 
 presnivs = nc.variables['altitude'][:]
-print len(presnivs)
-
 # creer un fichier netcdef --> http://www.ceda.ac.uk/static/media/uploads/ncas-reading-2015/11_create_netcdf_python.pdf
 dataset = NetCDFFile('TempModalSpectra'+'-im-'+str(im)+'-upto-n-'+str(nbn)+'.nc', 'w', format='NETCDF3_CLASSIC')
        	#----Dimensions-----------------------------------------------------------------------------
@@ -78,7 +83,7 @@ frequences[:] = w
 #mz_counter = dataset.createDimension(mcoord, None)
 nz_counter = dataset.createDimension(ncoord, None)
 
-FFT= dataset.createVariable('FFT', np.float64, (ncoord,fcoord,zcoord))
+EFT= dataset.createVariable('EFT', np.float64, (ncoord,fcoord,zcoord))
 omega_RHW= dataset.createVariable('omega_RHW', np.float64, (ncoord))
 
 
@@ -98,16 +103,17 @@ E_YTuk= np.zeros([N_T/2+1,niz,len(Trange)])
 #_FFT_= np.zeros([N_T/2+1,niz])
 #ToOMEGA = 2.*omega_sat
 #omega_RHW[il,im] = (2.*omega_sat*float(im))/(float(il)*(float(il)+1.)) # en rad.s-1
-
 for ni in range(im, nbn+1):
+	print ni
 	for iz in range(0,niz):
-		sf_r = nc.variables['sf_r'][:-1000,iz,ni,im] # [time,altitude,n,m]
+		sf_r = nc.variables['sf_r'][:,iz,ni,im] # [time,altitude,n,m]
+		print sf_r.shape
 		for it in Trange:#range(0, nbT,Tstep)
 			(sfr_Tuk) = windowing.WindowingTukey(sf_r[it:-nbT+it],N_T,L_T,0 )#BLM_t[l,m,t]
-			( FFT_YTuk,E_YTuk[:,iz,it],modes ) = FourierTransform1D.fft1D ( sfr_Tuk, N_T )
+			( EFT_YTuk,E_YTuk[:,iz,it],modes ) = FourierTransform1D.fft1D ( sfr_Tuk, N_T )
 
 
-	FFT[ni,:,:] = np.mean(E_YTuk[:,:,:],2)#[n,fq,iz]
+	EFT[ni,:,:] = np.mean(E_YTuk[:,:,:],2)#[n,fq,iz]
 	omega_RHW[ni] = (2.*omega_sat*float(im))/(float(ni)*(float(ni)+1.)) # en rad.s-1
 	print 'completed n = '+str(ni)+' on '+str(nbn)
 	E_YTuk= np.zeros([N_T/2+1,niz,len(Trange)])
