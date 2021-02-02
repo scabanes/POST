@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 from netCDF4 import Dataset as NetCDFFile 
 import numpy as np
+
 import math
 from pylab import *
 from decimal import *
@@ -12,14 +13,15 @@ import FourierTransform1D
 ############################################################################################
 zefile = 'StatisticalData-FullTime.nc'
 #---------------------------------------------------------------Mode azimutaux
-im = 3 		# indice en longitude
+im = 1 		# indice en longitude
 #---------------------------------------------------------------Moyenne glissee en temps & truncation
-nbT = 3 	# -nbT de donnees enleve a la fin du signal
+nbT = 300 	# -nbT de donnees enleve a la fin du signal
 Tstep = 1 	# time step pour la moyenne glisse
 #---------------------------------------------------------------for multiple value of l
-nbn = 3 	# va jusqu a l indice nbl
-omega_sat = 0.000165121 #rad.s-1
-JourSaturn_s = 118.9125*320# jour saturne en seconde est dt=118.9125 fois 320 le nombre de pas en temps pour faire une journee ~(2*pi)/0.000165121 = 38052,00614809
+nbn = 25 	# va jusqu a l indice nbl
+omega_sat = 0.000165121/4 #rad.s-1
+print omega_sat
+JourSaturn_s = 118.9125*320*4 # jour saturne en seconde est dt=118.9125 fois 320 le nombre de pas en temps pour faire une journee ~(2*pi)/0.000165121 = 38052,00614809
 ############################################################################################
 # 		    Load Data
 ############################################################################################
@@ -38,8 +40,8 @@ print 'Signal length : ',N_T
 print 'Signal length in days : ',L_T/JourSaturn_s
 print 'Signal length in second : ',L_T
 #............SIGNAL USED FOR FFT
-LL_T = (time_counter[0:-nbT+0]-time_counter[0])# exclude the value -nbT
-L_T = LL_T[-1]
+Time = (time_counter[0:-nbT+0]-time_counter[0])# exclude the value -nbT
+L_T = Time[-1]
 N_T = len(time_counter[0:-nbT+0])
 #FFT_YTuk= np.zeros([N_T/2+1,nbT])
 print '..........................LENGTH USED FOR FFT'
@@ -109,8 +111,9 @@ for ni in range(im, nbn+1):
 		sf_r = nc.variables['sf_r'][:,iz,ni,im] # [time,altitude,n,m]
 		print sf_r.shape
 		for it in Trange:#range(0, nbT,Tstep)
-			(sfr_Tuk) = windowing.WindowingTukey(sf_r[it:-nbT+it],N_T,L_T,0 )#BLM_t[l,m,t]
-			( EFT_YTuk,E_YTuk[:,iz,it],modes ) = FourierTransform1D.fft1D ( sfr_Tuk, N_T )
+			#(sfr_Tuk) = windowing.WindowingTukey(sf_r[it:-nbT+it],N_T,L_T,0 )#BLM_t[l,m,t]
+			#( EFT_YTuk,E_YTuk[:,iz,it],modes ) = FourierTransform1D.fft1D ( sfr_Tuk, N_T )
+			( EFT_YTuk,E_YTuk[:,iz,it],modes ) = FourierTransform1D.fft1D ( sf_r[it:-nbT+it], N_T )
 
 
 	EFT[ni,:,:] = np.mean(E_YTuk[:,:,:],2)#[n,fq,iz]
