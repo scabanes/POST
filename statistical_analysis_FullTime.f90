@@ -201,7 +201,7 @@ if(NetcdefStatData == 1) then
   call check( nf90_def_dim(ncidF, "lon", nlon, lon_dimid))
   call check( nf90_def_dim(ncidF, "lat", nlat+1, lat_dimid))  !!!!! to change
   call check( nf90_def_dim(ncidF, "altitude", nalt, alt_dimid))
- ! call check( nf90_def_dim(ncidF, "time_counter", mt, t_dimid))
+ ! call check( nf90_def_dim(ncidF, "time_counter", mt, t_dimid)) ! change to unlimited below. This way, ncrcat concatenate along the time dimension.
   call check( nf90_def_dim(ncidF, "time_counter", nf90_unlimited, t_dimid))
   dimids =  (/ lat_dimid, lon_dimid, alt_dimid, t_dimid /)!
   dimid3s =  (/ lat_dimid, lat_dimid, alt_dimid, t_dimid /)!
