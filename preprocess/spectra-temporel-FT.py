@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 from netCDF4 import Dataset as NetCDFFile 
 import numpy as np
-
 import math
+import matplotlib.pyplot as plt
 from pylab import *
 from decimal import *
 # --> Librairie Simon
@@ -15,13 +15,12 @@ zefile = 'StatisticalData-FullTime.nc'
 #---------------------------------------------------------------Mode azimutaux
 im = 1 		# indice en longitude
 #---------------------------------------------------------------Moyenne glissee en temps & truncation
-nbT = 300 	# -nbT de donnees enleve a la fin du signal
+nbT = 5500 	# -nbT de donnees enleve a la fin du signal
 Tstep = 1 	# time step pour la moyenne glisse
 #---------------------------------------------------------------for multiple value of l
-nbn = 25 	# va jusqu a l indice nbl
-omega_sat = 0.000165121/4 #rad.s-1
-print omega_sat
-JourSaturn_s = 118.9125*320*4 # jour saturne en seconde est dt=118.9125 fois 320 le nombre de pas en temps pour faire une journee ~(2*pi)/0.000165121 = 38052,00614809
+nbn = 35 	# va jusqu a l indice nbl
+omega_sat = 0.000165121 #rad.s-1
+JourSaturn_s = 118.9125*320 # jour saturne en seconde est dt=118.9125 fois 320 le nombre de pas en temps pour faire une journee ~(2*pi)/0.000165121 = 38052,00614809
 ############################################################################################
 # 		    Load Data
 ############################################################################################
@@ -49,10 +48,9 @@ print 'Signal length : ',N_T
 print 'Signal length in days : ',L_T/JourSaturn_s
 print 'Signal length in second : ',L_T
 ############################################################################################
-#sf_r = nc.variables['sf_r'][:-nbT,0,1,0] #[t,z,n,m]
-#print sf_r.shape
-#(sfr_Tuk) = windowing.WindowingTukey(sf_r,N_T,L_T,1 )#BLM_t[l,m,t]
-#( FFT_YTuk,E_YTuk[:,iz,it],modes ) = FourierTransform1D.fft1D ( sfr_Tuk, N_T )
+#Time_step = (time_counter[1:]-time_counter[0:-1])/JourSaturn_s
+#plt.plot(Time_step)
+#plt.show()
 #exit()
 ############################################################################################
 # 		    WRITE NETCEDEF
