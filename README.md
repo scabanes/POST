@@ -14,13 +14,11 @@ make statistical_analysis_xyzt
 1. Preprocess Xhistins (python in preprocess)
 2. statistical_analysis_xyzt uvData-istep-0-nstep-40-niz-12.nc
 3. e.g. Tevo-PltStat.py StatisticalData.nc
-
-On a:
-
 ZUVT_pretraitement_HV.py (->uvData-istep-x-nstep-xxx-niz-xx.nc)
 statistical_analysis_xyzt.f90 (->StatisticalData.nc) --> routine de travail de base.
-On peut exploiter ces donnees avec les
-routines:
+
+<ins>Background functions,</ins>
+
 + Tevo-PltStat.py         --> time evolution of the data/spectra/fluxes
 + I-PltStat.py            --> Mean time and each levels
 + comparaison-v2.py	  --> comparaison de toutes les simus
@@ -31,6 +29,8 @@ background routines
 + filePTS.zono.temp	  --> Enter data of the specific simulation
 
 ## B) TEMPORAL SERIES & SPECTRA
+
+<ins>Steps,</ins>
 1. <strong>/preprocess/CropData-FT</strong> (needs: ncrcat)   <strong>--></strong> Xhistins_x-uvtizxx.nc <br/>
 <em> A bash code that extracts in a Xhistins_x.nc file and creates a reduced file Xhistins_x-uvtizxx.nc with selected variables u[:,iz,::],v[:,iz,::],time_counter,lat,lon at a given level iz.</em>
 2. <strong>/preprocess/UVT_pretraitement_FT.py</strong> (needs python)     <strong>--></strong> uvData-FullTime-istep-xx-nstep-xxx-iz-x.nc)  <br/>
