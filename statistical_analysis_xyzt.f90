@@ -58,7 +58,7 @@ integer :: mdab_v,mdab_s,mdab_smaller
 double precision, dimension(:,:), allocatable :: uoff_f,voff_f,fvm,fwm,uoff,voff,vm,wm,fbr,fbi,fcr,fci,LM_zm,PVsorted_zm
 double precision, dimension(:,:,:), allocatable :: vm3d,wm3d,u_DYN,v_DYN,UvectVT_lon,UvectVT_lat,u_rot,v_rot,u_div,v_div,udotu,vgrad,wgrad,vgradN,wgradN,L_M
 double precision, dimension(:,:), allocatable :: fu,fv,rotuwP
-double precision, dimension (:), allocatable :: lat_DYN,lon_DYN,alt_DYN,colat_DYN,dsteps_DYN,lat_SP,lat_mono,lon_SP,colat_SP,epsilonf
+double precision, dimension (:), allocatable :: time_counter_DYN,lat_DYN,lon_DYN,alt_DYN,colat_DYN,dsteps_DYN,lat_SP,lat_mono,lon_SP,colat_SP,epsilonf
 double precision, dimension(:,:,:), allocatable ::  br,bi,cr,ci,Fdivuwr,Fdivuwi,Frotuwr,Frotuwi,Jmn,uur,uui,bbr,bbi,ccr,cci,ar,ai,divgraduur,divgraduui,rotgraduur,rotgraduui,div2_ugradu_r,div2_ugradu_i
 character (len=100) :: file_netcdf,file_spectra,nickname
 integer :: idfile,ncidF,ierror,idu,idv,idlat,idlon,idalt,idvw,jdvw,mdab,ndab,ivrt,jvrt,mdc,ndc,nt=1,ityp=0,isym=0,ioff,fgg,lon_dimid,lat_dimid,latmono_dimid,alt_dimid,t_dimid,wmid,vmid,vortid,Emnid,PVid,PVsortedid,deltaIdxdid, dimid3s(4),dimids(4),dimids_mono(4),dimids_1d(2),dimids_2d(3),dimidsmono_3d(3),dimids_3d(3), dimids_alttime(2), idvti,idfile2,idtime,idnlon,idnlat,idnalt,iddsteps,idSu,fuid,fvid,urotid,vrotid,udivid,vdivid
@@ -166,13 +166,16 @@ end if
  call check( nf90_inquire_dimension(idfile,idnlat,tmp_char,nlat))
  call check( nf90_inquire_dimension(idfile,idnalt,tmp_char,nalt))
 
+ call check( nf90_inq_varid(idfile,trim('time_counter'),idtime))
  call check( nf90_inq_varid(idfile,trim('lat'),idlat))
  call check( nf90_inq_varid(idfile,trim('lon'),idlon))
  call check( nf90_inq_varid(idfile,trim('altitude'),idalt))
 
+ allocate(time_counter_DYN(ntime))
  allocate(lat_DYN(nlat))
  allocate(lon_DYN(nlon))
  allocate(alt_DYN(nalt))
+ call check( nf90_get_var(idfile,idtime,time_counter_DYN,(/1/),(/ntime/)) ) !(lon,lat,iz,it)
  call check( nf90_get_var(idfile,idlat,lat_DYN,(/1/),(/nlat/)) ) !(lon,lat,iz,it)
  call check( nf90_get_var(idfile,idlon,lon_DYN,(/1/),(/nlon/)) ) !(lon,lat,iz,it)
  call check( nf90_get_var(idfile,idalt,alt_DYN,(/1/),(/nalt/)) ) !(lon,lat,iz,it)
@@ -217,11 +220,11 @@ if(NetcdefStatData == 1) then
 ! ---------------------------DEFINITION OF DIMENSIONS
   !call check( nf90_create("StatisticalData.nc", NF90_CLOBBER, ncid))
   call check( nf90_create(path="StatisticalData.nc", cmode=or(nf90_clobber,nf90_64bit_offset),ncid=ncidF))
-  call check( nf90_def_dim(ncidF, "nlon", nlon, lon_dimid))
-  call check( nf90_def_dim(ncidF, "nlat", nlat+1, lat_dimid))  !!!!! to change
-  call check( nf90_def_dim(ncidF, "nlat_mono", (nlat+1)-(lat_PVmin+lat_PVmax-1), latmono_dimid))  
-  call check( nf90_def_dim(ncidF, "nalt", nalt, alt_dimid))
-  call check( nf90_def_dim(ncidF, "time", mt, t_dimid))
+  call check( nf90_def_dim(ncidF, "lon", nlon, lon_dimid))
+  call check( nf90_def_dim(ncidF, "lat", nlat+1, lat_dimid))  !!!!! to change
+  call check( nf90_def_dim(ncidF, "lat_mono", (nlat+1)-(lat_PVmin+lat_PVmax-1), latmono_dimid))  
+  call check( nf90_def_dim(ncidF, "altitude", nalt, alt_dimid))
+  call check( nf90_def_dim(ncidF, "time_counter", nf90_unlimited, t_dimid))
   dimids =  (/ lat_dimid, lon_dimid, alt_dimid, t_dimid /)!
   dimids_mono =  (/ latmono_dimid, lon_dimid, alt_dimid, t_dimid /)!
   dimid3s =  (/ lat_dimid, lat_dimid, alt_dimid, t_dimid /)!
@@ -236,10 +239,10 @@ if(NetcdefStatData == 1) then
   call check( nf90_def_var(ncidF, "lon", NF90_DOUBLE, lon_dimid, lonid))
   call check( nf90_def_var(ncidF, "lat", NF90_DOUBLE, lat_dimid, latid))
   call check( nf90_def_var(ncidF, "altitude", NF90_DOUBLE, alt_dimid, altid))
+  call check( nf90_def_var(ncidF, "time_counter", NF90_DOUBLE, t_dimid, tid))
   call check( nf90_def_var(ncidF, "colat", NF90_DOUBLE, lat_dimid, colatid))
 !------------------------------------------------------------------------------------------
 ! from here time dependent varialbes
-  call check( nf90_def_var(ncidF, "time", NF90_REAL4, t_dimid, tid))
   call check( nf90_def_var(ncidF, "Urms", NF90_DOUBLE, dimids_alttime, Urmsid))
 
   call check( nf90_def_var(ncidF, "dsteps", NF90_DOUBLE, t_dimid, dstepsid))
@@ -295,7 +298,7 @@ end if
 !-------------------------------------------------------------------------------------------
 ! ---------------------------VARIABLES FILL INSTRUCTIONS for time dependent variables
 
-  call check( NF90_PUT_ATT  (ncidF, tid, "_FillValue", NF90_FILL_REAL4) )
+  call check( NF90_PUT_ATT  (ncidF, tid, "_FillValue", NF90_FILL_DOUBLE) )
   call check( NF90_PUT_ATT  (ncidF, Urmsid, "_FillValue", NF90_FILL_DOUBLE) )
 
   call check( NF90_PUT_ATT  (ncidF, dstepsid, "_FillValue", NF90_FILL_DOUBLE) )
@@ -584,7 +587,7 @@ end do
 nlat_mono = nlat-(lat_PVmin+lat_PVmax-1)
 allocate(lat_mono(nlat_mono)) ; lat_mono = 0.0d0
 lat_mono = lat_SP(lat_PVmin:nlat-lat_PVmax)
-print*, lat_mono
+!print*, lat_mono
 !******************************************************************
 !size nlat
 allocate(vort(nlat,nlon,nalt)) ; vort = 0.0d0
@@ -778,7 +781,7 @@ if(NetcdefStatData == 1) then
     First_reading = .false.
   end if
 !------------------------------------------------------------------------------------------
-   call check( nf90_put_var( ncidF, tid, it, start=(/it/) ) )
+   call check( nf90_put_var( ncidF, tid, time_counter_DYN(it), start=(/it/) ) )
    call check( nf90_put_var( ncidF, Urmsid, Urms,(/1,it/),(/nalt,1/) ) )
 
    call check( nf90_put_var( ncidF, dstepsid, dsteps_DYN(it), start=(/it/) ) )
