@@ -244,8 +244,8 @@ if(0==0):
 	ax.legend()
 	plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
 	plt.xlabel(r'$\omega$', fontsize=13)
-	axes = plt.gca()
-	axes.set_xlim([xmin,xmax])
+	#axes = plt.gca()
+	#axes.set_xlim([xmin,xmax])
 
 if(0==0):
 
@@ -282,6 +282,6 @@ if(0==0):
 	ax.legend()
 	plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
 	plt.xlabel(r'$\omega$', fontsize=13)
-	axes = plt.gca()
-	axes.set_xlim([xmin,xmax])
+	#axes = plt.gca()
+	#axes.set_xlim([xmin,xmax])
 plt.show(figA)	

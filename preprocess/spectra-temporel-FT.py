@@ -13,7 +13,7 @@ import FourierTransform1D
 ############################################################################################
 zefile = 'StatisticalData-FullTime.nc'
 #---------------------------------------------------------------Mode azimutaux
-im = 1 		# indice en longitude
+im = 0 		# indice en longitude
 #---------------------------------------------------------------Moyenne glissee en temps & truncation
 nbT = 5500 	# -nbT de donnees enleve a la fin du signal
 Tstep = 1 	# time step pour la moyenne glisse
@@ -115,7 +115,7 @@ for ni in range(im, nbn+1):
 
 
 	EFT[ni,:,:] = np.mean(E_YTuk[:,:,:],2)#[n,fq,iz]
-	omega_RHW[ni] = (2.*omega_sat*float(im))/(float(ni)*(float(ni)+1.)) # en rad.s-1
+	omega_RHW[ni] = 0#(2.*omega_sat*float(im))/(float(ni)*(float(ni)+1.)) # en rad.s-1
 	print 'completed n = '+str(ni)+' on '+str(nbn)
 	E_YTuk= np.zeros([N_T/2+1,niz,len(Trange)])
 
