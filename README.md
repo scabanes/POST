@@ -1,5 +1,5 @@
 # POST
-Statistical tools to study geophysical flows
+<strong>Package Of Statistical Tools</strong> to study geophysical flows in spherical geometry
 
 ```
 cd spherepack3.2
@@ -12,8 +12,14 @@ make statistical_analysis_xyzt
 
 <ins>Steps</ins>
 1. <strong>/preprocess/ZUVT_pretraitement_HV.py</strong> (needs: python)    		<strong>--></strong> uvData-istep-xx-nstep-xx-niz-xx.nc <br/>
-<em>Select variables and dimension [time,z,longitude] in file Xhistins_x.nc and concatenate into a single file.</em>
-2. <strong>statistical_analysis_xyzt</strong> (needs: Fortran 90 & spherepack)  	<strong>--></strong>  <br/>
+<em>Select variables u,v,u_SMerid, v_SMerid, and crop dimension [time,altitude,longitude] in files Xhistins_x.nc and concatenate into a single file.</em>
+2. <strong>statistical_analysis_xyzt</strong> (needs: Fortran 90 & spherepack)  	<strong>--></strong> StatisticalData.nc <br/>
+arguments:
++ uvData-istep-xx-nstep-xx-niz-xx.nc is the file to read
++ -h    : brief help
++ -mt x : x is the number of step
++ -istp : first temporal step
++ -tstp : final temporal step
 3. <strong>/plots/.py</strong> (needs: python, LoadInfos.py & filePTS.zono.temp)
 
 
