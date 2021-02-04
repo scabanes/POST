@@ -15,6 +15,7 @@ make statistical_analysis_xyzt
 2. <strong>statistical_analysis_xyzt</strong> (needs: Fortran 90 & spherepack)  	<strong>--></strong>  <br/>
 3. <strong>/plots/.py</strong> (needs: python, LoadInfos.py & filePTS.zono.temp)
 
+```
 <ins>Background functions</ins>
 
 + Tevo-PltStat.py         --> time evolution of the data/spectra/fluxes
@@ -24,7 +25,8 @@ make statistical_analysis_xyzt
 + comparaison-kf.py	  --> comparaison des simus ayant different kf de forcage
 + LoadInfos.py		  --> Load les data from filePTS.zono.temp
 + filePTS.zono.temp	  --> Enter data of the specific simulation
-
+```
+----- 
 ## B) TEMPORAL SERIES & SPECTRA
 
 <ins>Steps</ins>
@@ -44,12 +46,12 @@ make statistical_analysis_xyzt
 + windowing.py		   --> For Hanning and Tukey windowing of the signals.
 + LoadInfos.py		   --> Load les data from filePTS.zono.temp
 + filePTS.zono.temp	   --> Enter data of the specific simulation
------ 
 + ZUVT_pretraitement_FT.py --> Can extract suited netcdf file to be used with <em>statistical_analysis_FullTime</em>
 
 
 *<em>Usually uvData-FullTime-istep-xx-nstep-xxx-iz-x.nc & StatisticalData-FullTime.nc cannot exceeds more than ~1500 time steps, then I advise to split in different files and then concatenate StatisticalData-FullTime.nc files in a single one using ncrcat.</em>
 
+----- 
 ## C) FOR DISSIPATION SPECTRAL STUDIES
 ZUVT_pretraitement_dissip.py 
 statistical_analysis_dissip.f90 (->StatisticalData.nc) --> il y a egalement une sortie avec des spectres des donnees de dissipation
