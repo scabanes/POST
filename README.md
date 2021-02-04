@@ -15,9 +15,9 @@ make statistical_analysis_xyzt
 2. <strong>statistical_analysis_xyzt</strong> (needs: Fortran 90 & spherepack)  	<strong>--></strong>  <br/>
 3. <strong>/plots/.py</strong> (needs: python, LoadInfos.py & filePTS.zono.temp)
 
-```
-<ins>Background functions</ins>
 
+<ins>Background functions</ins>
+```
 + Tevo-PltStat.py         --> time evolution of the data/spectra/fluxes
 + I-PltStat.py            --> Mean time and each levels
 + comparaison-v2.py	  --> comparaison de toutes les simus
@@ -26,7 +26,7 @@ make statistical_analysis_xyzt
 + LoadInfos.py		  --> Load les data from filePTS.zono.temp
 + filePTS.zono.temp	  --> Enter data of the specific simulation
 ```
------ 
+
 ## B) TEMPORAL SERIES & SPECTRA
 
 <ins>Steps</ins>
@@ -41,13 +41,13 @@ make statistical_analysis_xyzt
 5. <strong>/plots/Plt-spectra-temporel.py</strong> (needs: python, LoadInfos.py & filePTS.zono.temp)   <em>Subplots of the frequency spectra for severl n and a given m.</em>
 
 <ins>Background functions</ins>
-
+```
 + FourierTransform1D.py    --> For 1D Fourier Transform (FFT)
 + windowing.py		   --> For Hanning and Tukey windowing of the signals.
 + LoadInfos.py		   --> Load les data from filePTS.zono.temp
 + filePTS.zono.temp	   --> Enter data of the specific simulation
 + ZUVT_pretraitement_FT.py --> Can extract suited netcdf file to be used with <em>statistical_analysis_FullTime</em>
-
+```
 
 *<em>Usually uvData-FullTime-istep-xx-nstep-xxx-iz-x.nc & StatisticalData-FullTime.nc cannot exceeds more than ~1500 time steps, then I advise to split in different files and then concatenate StatisticalData-FullTime.nc files in a single one using ncrcat.</em>
 
