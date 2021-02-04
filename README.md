@@ -36,6 +36,7 @@ statistical_analysis_dissip.f90 (->StatisticalData.nc) --> il y a egalement une 
 
 ## C)------------------------------------TEMPORAL SERIES
 1. <strong>/preprocess/CropData-FT</strong>  --> Xhistins_X-uvtizX.nc 
+
 A bash code to extract selected variable to a Xhistins_X.nc file to create a reduced file Xhistins_X-uvtizX.nc with selected variables u[:,iz,::],v[:,iz,::],time_counter,lat,lon.
 2. /preprocess/UVT_pretraitement_FT.py (->uvData-FullTime-istep-XX-nstep-XXX-iz-X.nc) concatenate
 all reduced Xhistins_X-uvtizX.nc into a single file.
