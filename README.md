@@ -15,14 +15,14 @@ make statistical_analysis_xyzt
 <li> <strong>/preprocess/ZUVT_pretraitement_HV.py</strong> (needs: python)    		<strong>--></strong> uvData-istep-xx-nstep-xx-niz-xx.nc <br/>
 <em>Select variables u,v,u_SMerid, v_SMerid, and crop dimension [time,altitude,longitude] in files Xhistins_x.nc and concatenate into a single file.</em></li> 
 <li> <strong>statistical_analysis_xyzt</strong> (needs: Fortran 90 & spherepack)  	<strong>--></strong> StatisticalData.nc <br/>
-<em>Plot average spectral quantity: energy spectra, energy and enstrophy fluxes.</em>
 Arguments:
 + uvData-istep-xx-nstep-xx-niz-xx.nc is the file to read
 + -h    : brief help
 + -mt x : x is the number of step
 + -istp : first temporal step
 + -tstp : final temporal step</li>
-<li> <strong>/plots/Plt-EquiStat.py</strong> (needs: python, LoadInfos.py, filePTS.zono.temp & filePTS.plots.infos)</li>
+<li> <strong>/plots/Plt-EquiStat.py</strong> (needs: python, LoadInfos.py, filePTS.zono.temp & filePTS.plots.infos)<br/>
+<em>Plot average spectral quantity: energy spectra, energy and enstrophy fluxes.</em></li>
 </ol>
 
 <ins>Background functions</ins>
