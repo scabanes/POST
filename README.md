@@ -12,6 +12,7 @@ make statistical_analysis_xyzt
 
 <ins>Steps</ins>
 1. <strong>/preprocess/ZUVT_pretraitement_HV.py</strong> (needs: python)    		<strong>--></strong> uvData-istep-xx-nstep-xx-niz-xx.nc <br/>
+<em>Select variables and dimension [time,z,longitude] in file Xhistins_x.nc and concatenate into a single file.</em>
 2. <strong>statistical_analysis_xyzt</strong> (needs: Fortran 90 & spherepack)  	<strong>--></strong>  <br/>
 3. <strong>/plots/.py</strong> (needs: python, LoadInfos.py & filePTS.zono.temp)
 
@@ -47,7 +48,7 @@ make statistical_analysis_xyzt
 + LoadInfos.py		   --> Load les data from filePTS.zono.temp
 + filePTS.zono.temp	   --> Enter data of the specific simulation
 + ZUVT_pretraitement_FT.py --> Can extract suited netcdf file to be used 
-			       with <em>statistical_analysis_FullTime</em>
+			       with statistical_analysis_FullTime
 ```
 
 *<em>Usually uvData-FullTime-istep-xx-nstep-xxx-iz-x.nc & StatisticalData-FullTime.nc cannot exceeds more than ~1500 time steps, then I advise to split in different files and then concatenate StatisticalData-FullTime.nc files in a single one using ncrcat.</em>
