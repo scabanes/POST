@@ -1759,10 +1759,10 @@ do id = 1, nalt
   ! n > 0 terms
   do n = 1, ndab-1
     En(n+1,id) = Emn(1,n+1,id) + 2.0d0 * sum(Emn(2:n+1,n+1,id))
-    !En_rot(n+1,id) = Emn_rot(1,n+1,id) + 2.0d0 * sum(Emn_rot(2:n+1,n+1,id))
-    !En_div(n+1,id) = Emn_div(1,n+1,id) + 2.0d0 * sum(Emn_div(2:n+1,n+1,id))
-    En_rot(n+1,id) = 2.0d0 * sum(Emn_rot(2:n+1,n+1,id))
-    En_div(n+1,id) = 2.0d0 * sum(Emn_div(2:n+1,n+1,id))
+    En_rot(n+1,id) = Emn_rot(1,n+1,id) + 2.0d0 * sum(Emn_rot(2:n+1,n+1,id))
+    En_div(n+1,id) = Emn_div(1,n+1,id) + 2.0d0 * sum(Emn_div(2:n+1,n+1,id))
+    !En_rot(n+1,id) = 2.0d0 * sum(Emn_rot(2:n+1,n+1,id)) ! here I look at all modes except m=0 for the rot component
+    !En_div(n+1,id) = 2.0d0 * sum(Emn_div(2:n+1,n+1,id)) ! here I look at all modes except m=0 for the div component
     Enmo(n+1,id) = Emn(1,n+1,id)
     Ene(n+1,id) = 2.0d0 * sum(Emn(2:n+1,n+1,id))
   enddo
