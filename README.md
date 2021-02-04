@@ -1,5 +1,5 @@
 # POST
-<strong>Package Of Statistical Tools</strong> to study geophysical flows in spherical geometry
+<ins><strong>Package Of Statistical Tools</strong></ins> to study geophysical flows in spherical geometry
 
 ```
 cd spherepack3.2
@@ -8,7 +8,7 @@ cd ..
 make statistical_analysis_xyzt
 ```
 
-## A) FOR GENERAL STATISTICAL ANALYSIS
+## A) GENERAL STATISTICAL ANALYSIS
 
 <ins>Steps</ins>
 1. <strong>preprocess/ZUVT_pretraitement_HV.py</strong> (needs: python)    		<strong>--></strong> uvData-istep-xx-nstep-xx-niz-xx.nc <br/>
