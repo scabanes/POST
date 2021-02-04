@@ -15,24 +15,27 @@ make statistical_analysis_xyzt
 <li> <strong>/preprocess/ZUVT_pretraitement_HV.py</strong> (needs: python)    		<strong>--></strong> uvData-istep-xx-nstep-xx-niz-xx.nc <br/>
 <em>Select variables u,v,u_SMerid, v_SMerid, and crop dimension [time,altitude,longitude] in files Xhistins_x.nc and concatenate into a single file.</em></li> 
 <li> <strong>statistical_analysis_xyzt</strong> (needs: Fortran 90 & spherepack)  	<strong>--></strong> StatisticalData.nc <br/>
+<em>Plot average spectral quantity: energy spectra, energy and enstrophy fluxes.</em>
 Arguments:
 + uvData-istep-xx-nstep-xx-niz-xx.nc is the file to read
 + -h    : brief help
 + -mt x : x is the number of step
 + -istp : first temporal step
 + -tstp : final temporal step</li>
-<li> <strong>/plots/.py</strong> (needs: python, LoadInfos.py & filePTS.zono.temp)</li>
+<li> <strong>/plots/Plt-EquiStat.py</strong> (needs: python, LoadInfos.py, filePTS.zono.temp & filePTS.plots.infos)</li>
 </ol>
 
 <ins>Background functions</ins>
 ```
++ LoadInfos.py		  --> Load les data from filePTS.zono.temp
++ filePTS.zono.temp	  --> Input informations of the dataset (-> nest in the working directory)
++ filePTS.plots.infos	  --> Input information to plot and average (-> nest in the working directory)
+To be updated:
 + Tevo-PltStat.py         --> time evolution of the data/spectra/fluxes
 + I-PltStat.py            --> Mean time and each levels
 + comparaison-v2.py	  --> comparaison de toutes les simus
 + comparaison-rotrate.py  --> comparaison des simus ayant differents rotation rates
 + comparaison-kf.py	  --> comparaison des simus ayant different kf de forcage
-+ LoadInfos.py		  --> Load les data from filePTS.zono.temp
-+ filePTS.zono.temp	  --> Enter data of the specific simulation
 ```
 
 ## B) TEMPORAL SERIES & SPECTRA
@@ -46,14 +49,14 @@ Arguments:
 <em>Extract u and v to compute the streamfunction sf and the associated spherical harmonics coefficients sf_r and sf_i in long time series.</em>
 4. <strong>/preprocess/spectra-temporel-FT.py </strong> (needs: python, FourierTransform1D.py)  <strong>--></strong> TempModalSpectra-im-0-upto-n-35.nc <br/>
 <em>Compute the frequency spectra by applying a fourier transform in time to the harmonics coefficients sf_r at given modes m and n. A rolling averaged in time is apply to the frequency spectra. </em>
-5. <strong>/plots/Plt-spectra-temporel.py</strong> (needs: python, LoadInfos.py & filePTS.zono.temp)   <em>Subplots of the frequency spectra for severl n and a given m.</em>
+5. <strong>/plots/Plt-spectra-temporel.py</strong> (needs: python, LoadInfos.py & filePTS.zono.temp)   <em>Subplots of the frequency spectra for several n and a given m.</em>
 
 <ins>Background functions</ins>
 ```
 + FourierTransform1D.py    --> For 1D Fourier Transform (FFT)
 + windowing.py		   --> For Hanning and Tukey windowing of the signals.
 + LoadInfos.py		   --> Load les data from filePTS.zono.temp
-+ filePTS.zono.temp	   --> Enter data of the specific simulation
++ filePTS.zono.temp	   --> Enter data of the specific simulation  (-> nest in the working directory)
 + ZUVT_pretraitement_FT.py --> Can extract suited netcdf file to be used 
 			       with statistical_analysis_FullTime
 ```
