@@ -8,14 +8,14 @@ cd ..
 make statistical_analysis_xyzt
 ```
 
-Steps
+## A) FOR GENERAL STATISTICAL ANALYSIS
+
+<ins>Steps,</ins>
 1. Preprocess Xhistins (python in preprocess)
 2. statistical_analysis_xyzt uvData-istep-0-nstep-40-niz-12.nc
 3. e.g. Tevo-PltStat.py StatisticalData.nc
 
 On a:
-
-## A) FOR GENERAL STATISTICAL ANALYSIS
 
 ZUVT_pretraitement_HV.py (->uvData-istep-x-nstep-xxx-niz-xx.nc)
 statistical_analysis_xyzt.f90 (->StatisticalData.nc) --> routine de travail de base.
@@ -30,11 +30,7 @@ background routines
 + LoadInfos.py		  --> Load les data from filePTS.zono.temp
 + filePTS.zono.temp	  --> Enter data of the specific simulation
 
-## B) FOR DISSIPATION SPECTRAL STUDIES
-ZUVT_pretraitement_dissip.py 
-statistical_analysis_dissip.f90 (->StatisticalData.nc) --> il y a egalement une sortie avec des spectres des donnees de dissipation
-
-## C) TEMPORAL SERIES & SPECTRA
+## B) TEMPORAL SERIES & SPECTRA
 1. <strong>/preprocess/CropData-FT</strong> (needs: ncrcat)   <strong>--></strong> Xhistins_x-uvtizxx.nc <br/>
 <em> A bash code that extracts in a Xhistins_x.nc file and creates a reduced file Xhistins_x-uvtizxx.nc with selected variables u[:,iz,::],v[:,iz,::],time_counter,lat,lon at a given level iz.</em>
 2. <strong>/preprocess/UVT_pretraitement_FT.py</strong> (needs python)     <strong>--></strong> uvData-FullTime-istep-xx-nstep-xxx-iz-x.nc)  <br/>
@@ -51,3 +47,6 @@ statistical_analysis_dissip.f90 (->StatisticalData.nc) --> il y a egalement une 
 + windowing.py		   --> For Hanning and Tukey windowing of the signals. 
 + ZUVT_pretraitement_FT.py --> Can extract suited netcdf file to be used with <em>statistical_analysis_FullTime</em>
 
+## C) FOR DISSIPATION SPECTRAL STUDIES
+ZUVT_pretraitement_dissip.py 
+statistical_analysis_dissip.f90 (->StatisticalData.nc) --> il y a egalement une sortie avec des spectres des donnees de dissipation
