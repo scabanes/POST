@@ -26,8 +26,8 @@ Arguments:
 <ins>Background functions</ins>
 ```
 + LoadInfos.py		  --> Load les data from filePTS.zono.temp
-+ filePTS.zono.temp	  --> Input infos of the dataset (> nest in the working directory)
-+ filePTS.plots.infos	  --> Input infos to plot and average (> nest in the working directory)
++ filePTS.zono.temp	  --> Input infos of the dataset (from Dev/ > nest in the working directory)
++ filePTS.plots.infos	  --> Input infos to plot (from Dev/ > nest in the working directory)
 To be updated:
 + Tevo-PltStat.py         --> time evolution of the data/spectra/fluxes
 + I-PltStat.py            --> Mean time and each levels
@@ -47,7 +47,8 @@ To be updated:
 <em>Extract u and v to compute the streamfunction sf and the associated spherical harmonics coefficients sf_r and sf_i in long time series.</em>
 4. <strong>preprocess/spectra-temporel-FT.py </strong> (needs: python, FourierTransform1D.py)  <strong>--></strong> TempModalSpectra-im-0-upto-n-35.nc <br/>
 <em>Compute the frequency spectra by applying a fourier transform in time to the harmonics coefficients sf_r at given modes m and n. A rolling averaged in time is apply to the frequency spectra. </em>
-5. <strong>plots/Plt-spectra-temporel.py</strong> (needs: python, LoadInfos.py & filePTS.zono.temp)   <em>Subplots of the frequency spectra for several n and a given m.</em>
+5. <strong>plots/Plt-spectra-temporel.py</strong> (needs: python, LoadInfos.py & filePTS.zono.temp) <br/>
+<em>Subplots of the frequency spectra for several n and a given m.</em>
 
 <ins>Background functions</ins>
 ```
