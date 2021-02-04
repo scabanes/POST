@@ -11,7 +11,7 @@ make statistical_analysis_xyzt
 ## A) FOR GENERAL STATISTICAL ANALYSIS
 
 <ins>Steps,</ins>
-1. Preprocess Xhistins (python in preprocess)
+1. <strong>/preprocess/CropData-FT</strong> (needs: python)  
 2. statistical_analysis_xyzt uvData-istep-0-nstep-40-niz-12.nc
 3. e.g. Tevo-PltStat.py StatisticalData.nc
 ZUVT_pretraitement_HV.py (->uvData-istep-x-nstep-xxx-niz-xx.nc)
