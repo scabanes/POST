@@ -11,8 +11,9 @@ make statistical_analysis_xyzt
 ## A) FOR GENERAL STATISTICAL ANALYSIS
 
 <ins>Steps</ins>
-1. <strong>/preprocess/ZUVT_pretraitement_HV.py</strong> (needs: python)    		<strong>--></strong> uvData-istep-xx-nstep-xx-niz-xx.nc <br/>
-<em>Select variables u,v,u_SMerid, v_SMerid, and crop dimension [time,altitude,longitude] in files Xhistins_x.nc and concatenate into a single file.</em>
+<ol>
+<li> <strong>/preprocess/ZUVT_pretraitement_HV.py</strong> (needs: python)    		<strong>--></strong> uvData-istep-xx-nstep-xx-niz-xx.nc <br/>
+<em>Select variables u,v,u_SMerid, v_SMerid, and crop dimension [time,altitude,longitude] in files Xhistins_x.nc and concatenate into a single file.</em></li>
 2. <strong>statistical_analysis_xyzt</strong> (needs: Fortran 90 & spherepack)  	<strong>--></strong> StatisticalData.nc <br/>
 
 Arguments:
