@@ -35,14 +35,13 @@ ZUVT_pretraitement_dissip.py
 statistical_analysis_dissip.f90 (->StatisticalData.nc) --> il y a egalement une sortie avec des spectres des donnees de dissipation
 
 ## C)------------------------------------TEMPORAL SERIES
-1. <strong>/preprocess/CropData-FT</strong>  --> Xhistins_X-uvtizX.nc <br/>
-A bash code to extract selected variable to a Xhistins_X.nc file to create a reduced file Xhistins_X-uvtizX.nc with selected variables u[:,iz,::],v[:,iz,::],time_counter,lat,lon.
-2. /preprocess/UVT_pretraitement_FT.py (->uvData-FullTime-istep-XX-nstep-XXX-iz-X.nc) concatenate
-all reduced Xhistins_X-uvtizX.nc into a single file.
-3. statistical_analysis_FullTime (->StatisticalData-FullTime.nc) extract u and v to 
-compute the streamfunction sf and the associated spherical harmonics coefficients
-sf_r and sf_i in long time series
-4. /preprocess/spectra-temporel-FT.py  ...
+1. <strong>/preprocess/CropData-FT</strong>    --> Xhistins_X-uvtizX.nc <br/>
+<em> A bash code to extract selected variable to a Xhistins_X.nc file and create a reduced file Xhistins_X-uvtizX.nc with selected variables u[:,iz,::],v[:,iz,::],time_counter,lat,lon.</em>
+2. <strong>/preprocess/UVT_pretraitement_FT.py</strong>    --> uvData-FullTime-istep-XX-nstep-XXX-iz-X.nc)  <br/>
+<em>concatenate all reduced Xhistins_X-uvtizX.nc into a single file.</em>
+3. <strong>statistical_analysis_FullTime</strong>    --> StatisticalData-FullTime.nc <br/>
+<em>extract u and v to compute the streamfunction sf and the associated spherical harmonics coefficients sf_r and sf_i in long time series.<em>
+4. <strong>/preprocess/spectra-temporel-FT.py </strong> ...<br/>
 
 or
 
