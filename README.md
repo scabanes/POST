@@ -26,7 +26,7 @@ Arguments:
 <ins>Background functions</ins>
 ```
 + LoadInfos.py		  --> Load les data from filePTS.zono.temp
-+ filePTS.zono.temp	  --> Input infos of the dataset (from Dev/ > nest in the working directory)
++ filePTS.zono.temp	  --> Input infos on dataset (from Dev/ > nest in the working directory)
 + filePTS.plots.infos	  --> Input infos to plot (from Dev/ > nest in the working directory)
 To be updated:
 + Tevo-PltStat.py         --> time evolution of the data/spectra/fluxes
@@ -55,7 +55,7 @@ To be updated:
 + FourierTransform1D.py    --> For 1D Fourier Transform (FFT)
 + windowing.py		   --> For Hanning and Tukey windowing of the signals.
 + LoadInfos.py		   --> Load les data from filePTS.zono.temp
-+ filePTS.zono.temp	   --> Input infos of the dataset (> nest in the working directory)
++ filePTS.zono.temp	   --> Input infos on dataset (from Dev/ > nest in the working directory)
 + ZUVT_pretraitement_FT.py --> Can extract suited netcdf file to be used 
 			       with statistical_analysis_FullTime
 ```
