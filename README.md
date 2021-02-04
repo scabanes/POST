@@ -45,7 +45,7 @@ statistical_analysis_dissip.f90 (->StatisticalData.nc) --> il y a egalement une 
 <em>Compute the frequency spectra by applying a fourier transform in time to the harmonics coefficients sf_r at given modes m and n. A rolling averaged in time is apply to the frequency spectra. </em>
 5. <strong>/plots/Plt-spectra-temporel.py</strong> (needs: python, LoadInfos.py & filePTS.zono.temp)   <em>Subplots of the frequency spectra for severl n and a given m.</em>
 
-Background functions,
+<ins>Background functions,</ins>
 
 + FourierTransform1D.py    --> For 1D Fourier Transform (FFT)
 + windowing.py		   --> For Hanning and Tukey windowing of the signals. 
