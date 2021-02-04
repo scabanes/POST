@@ -31,9 +31,11 @@ print omega_RHW.shape
 COLORS = ['magenta','black','darkblue','darkred','darkgreen','red','chartreuse','darkmagenta','navy']
 #............LOAD infos
 path=0
-(n,L_dim,omega_sat,epsilon_dim,epsilon_f,beta_sat,beta_dim,Ck,Cz,E_dim,n_beta,n_R,n_f,n_D) = LoadInfos.LI ( path  )
+E=np.array([0,0])
+(n,L_dim,T_dim,SatDay_s,omega_sat,epsilon_dim,epsilon_f,epsilon_i,EnstF_dim,beta_sat,beta_dim,Ck,Cz,E_dim,n_beta,n_R,n_f,n_D) = LoadInfos.LI ( path,E  )
+
 ToOMEGA = omega_sat/40.
-print omega_sat*2
+print omega_sat
 #plt.loglog(w,EFT[ni,:,:], '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 ic = -1
 #for ni in range(4,nbn+1):
