@@ -39,7 +39,7 @@ statistical_analysis_dissip.f90 (->StatisticalData.nc) --> il y a egalement une 
 <em> A bash code that extracts in a Xhistins_x.nc file and creates a reduced file Xhistins_x-uvtizxx.nc with selected variables u[:,iz,::],v[:,iz,::],time_counter,lat,lon at a given level iz.</em>
 2. <strong>/preprocess/UVT_pretraitement_FT.py</strong> (needs python)     <strong>--></strong> uvData-FullTime-istep-xx-nstep-xxx-iz-x.nc)  <br/>
 <em>Concatenate all reduced Xhistins_x-uvtizx.nc into a single file.</em>
-3. <strong>statistical_analysis_FullTime</strong> (needs: Fortran 90 & spherepack)    <strong>--></strong> StatisticalData-FullTime.nc <br/>
+3. <strong>statistical_analysis_FullTime</strong> (needs: Fortran 90 & spherepack)  $\beta$  <strong>--></strong> StatisticalData-FullTime.nc <br/>
 <em>Extract u and v to compute the streamfunction sf and the associated spherical harmonics coefficients sf_r and sf_i in long time series.</em>
 4. <strong>/preprocess/spectra-temporel-FT.py </strong> (needs: python)  <strong>--></strong> TempModalSpectra-im-0-upto-n-35.nc <br/>
 <em>Compute the frequency spectra by applying a fourier transform in time to the harmonics coefficients $sf_r(\omega)$ at given modes $m$ and $n$. A rolling averaged in time is apply to the frequency spectra. </em>
