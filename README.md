@@ -66,7 +66,5 @@ To be updated:*
 
 ## C) FOR DISSIPATION SPECTRAL STUDIES
 
-<ins>Steps</ins>
 ZUVT_pretraitement_dissip.py 
 statistical_analysis_dissip.f90 (->StatisticalData.nc) --> il y a egalement une sortie avec des spectres des donnees de dissipation
------ 
