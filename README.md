@@ -28,13 +28,15 @@ Arguments:
 + LoadInfos.py		  --> Load les data from filePTS.zono.temp
 + filePTS.zono.temp	  --> Input infos on dataset (from Dev/ > nest in the working directory)
 + filePTS.plots.infos	  --> Input infos to plot (from Dev/ > nest in the working directory)
-To be updated:
+To be updated:*
 + Tevo-PltStat.py         --> time evolution of the data/spectra/fluxes
 + I-PltStat.py            --> Mean time and each levels
 + comparaison-v2.py	  --> comparaison de toutes les simus
 + comparaison-rotrate.py  --> comparaison des simus ayant differents rotation rates
 + comparaison-kf.py	  --> comparaison des simus ayant different kf de forcage
 ```
+
+*<em>I'll find in /SPECTRA/POST/plots-old/ and /plots/ the codes of the Icarus and GRL papers respectively.</em>
 
 ## B) TEMPORAL SERIES & SPECTRA
 
