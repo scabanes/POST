@@ -42,6 +42,8 @@ def fft1D ( Y, N ):
 # frequence de Lunquist. 4/ FT_Y(N/2+2:end) on retrouve les N/2 modes qui
 # sont les conjugues de FT_Y(2:N/2). On a un signal FT_Y de taille L = 2 *
 # (N/2-1) + 2.
+# La FFT est definit telle que F(k) = Integral f(x) exp[-2ipi x k] dx
+# La IFFT est definit comme    f(x) = Integral F(k) exp[ 2ipi x k] dk
 # -----Tranformer de fourier par FFT
 	FFT_Y = np.fft.fft(Y) # D
 	FFT_Y2 = abs(FFT_Y/N)

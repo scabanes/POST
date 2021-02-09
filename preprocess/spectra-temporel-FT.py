@@ -18,7 +18,7 @@ im = 0 		# indice en longitude
 nbT = 5500 	# -nbT de donnees enleve a la fin du signal
 Tstep = 1 	# time step pour la moyenne glisse
 #---------------------------------------------------------------for multiple value of l
-nbn = 35 	# va jusqu a l indice nbl
+nbn = 50 	# va jusqu a l indice nbl
 omega_sat = 0.000165121 #rad.s-1
 JourSaturn_s = 118.9125*320 # jour saturne en seconde est dt=118.9125 fois 320 le nombre de pas en temps pour faire une journee ~(2*pi)/0.000165121 = 38052,00614809
 ############################################################################################
@@ -48,6 +48,19 @@ print 'Signal length : ',N_T
 print 'Signal length in days : ',L_T/JourSaturn_s
 print 'Signal length in second : ',L_T
 ############################################################################################
+# 		    Frequencies
+############################################################################################
+#  Let s take a simple 1D wave that propagates in positive x 
+# direction, it has the form f(k*x-w*t). So, the series in 
+# terms of such waves is f(x,t)= Integral f(k,w)exp[i(k*x-w*t] dk/(2Pi) dw.
+# Consequently the fourier transform in frequency w of f(t) is defined as
+# F(w) = Integral_t f(t) exp[ 2ipi x w] dt, with positive frequency in the
+# exponential. Python library has a minus sign in the FFT, then the sing of
+# frequency turn negative.
+fqmodes = np.arange(0.,N_T/2+1) # Attention!!! la gamme des modes demarre a 0 et pas 1, lunquist inclu
+w = -2.*np.pi*fqmodes/L_T #[2*pi*m/LT] = rad.s-1
+############################################################################################
+# check time steps in time_counter:
 #Time_step = (time_counter[1:]-time_counter[0:-1])/JourSaturn_s
 #plt.plot(Time_step)
 #plt.show()
@@ -73,8 +86,6 @@ presnivs = dataset.createDimension(zcoord, len(presnivs))
 presnivss = dataset.createVariable(zcoord, np.float64, (zcoord,))
 #presnivss[:] = presnivs
 
-fqmodes = np.arange(0.,N_T/2+1) # Attention!!! la gamme des modes demarre a 0 et pas 1, lunquist inclu
-w = 2.*np.pi*fqmodes/L_T #[2*pi*m/LT] = rad.s-1
 frequence = dataset.createDimension(fcoord, N_T/2+1)
 frequences = dataset.createVariable('frequences', np.float64, (fcoord,))
 frequences[:] = w
@@ -85,16 +96,6 @@ nz_counter = dataset.createDimension(ncoord, None)
 
 EFT= dataset.createVariable('EFT', np.float64, (ncoord,fcoord,zcoord))
 omega_RHW= dataset.createVariable('omega_RHW', np.float64, (ncoord))
-
-
-
-#mmode = dataset.createDimension(mcoord, 4)
-#mmodes = dataset.createVariable(mcoord, np.float64, (mcoord,))
-#mmodes[:] = 
-
-#nmode = dataset.createDimension(ncoord, 5)
-#nmodes = dataset.createVariable(ncoord, np.float64, (ncoord,))
-#nmodes[:] = 
 
 niz=len(presnivs)
 Trange =  np.arange(0, nbT,Tstep)
@@ -115,7 +116,10 @@ for ni in range(im, nbn+1):
 
 
 	EFT[ni,:,:] = np.mean(E_YTuk[:,:,:],2)#[n,fq,iz]
-	omega_RHW[ni] = 0#(2.*omega_sat*float(im))/(float(ni)*(float(ni)+1.)) # en rad.s-1
+	if im==0:
+		omega_RHW[ni] = 0#
+	else:
+		omega_RHW[ni] = -(2.*omega_sat*float(im))/(float(ni)*(float(ni)+1.)) # en rad.s-1	
 	print 'completed n = '+str(ni)+' on '+str(nbn)
 	E_YTuk= np.zeros([N_T/2+1,niz,len(Trange)])
 

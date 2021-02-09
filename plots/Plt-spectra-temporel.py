@@ -11,16 +11,19 @@ import LoadInfos
 # 		    PTS: "Parameters to set"
 ############################################################################################
 #nbn=7
-im = 1 # Il faut indiquer le mode concerne a titre indicatif
-ini = 15 #im
-stpn = 2 # step on n
+im = 0# Il faut indiquer le mode concerne a titre indicatif
+nrange = np.array([15,17,19,22,25,30,33,35,44]) # choose the latitudinal modes
+#ini = 15 #im
+#stpn = 3 # step in n
 #-------axis
-xmin=2e-7
-xmax=3e-6
+xmin=-4.15e-6
+xmax=0
+xlim=1 # if 1, limit x axis.
 # ..........File to load
-#zefile = 'TempModalSpectra-im-3-upto-n-30-stratosphere.nc'
-zefile = 'TempModalSpectra-im-1-upto-n-35.nc'
-#zefile = 'TempModalSpectra-im-3-upto-n-13-troposphere.nc'
+zefile = 'TempModalSpectra-im-'+str(im)+'-upto-n-50.nc'
+############################################################################################
+# 		    Load Data
+############################################################################################
 nc = NetCDFFile(zefile) # load file
 # ..........LOAD data from StatisticalData.nc
 EFT = nc.variables['EFT'][:,:,:] # [n,frq,altitude]
@@ -40,250 +43,302 @@ print omega_sat
 ic = -1
 #for ni in range(4,nbn+1):
 #	ic = ic + 1
-ni=ini#im#im
+ni=nrange[0]#ini#im#im
 figA, axs = plt.subplots()
 plt.title('n = ')
 #.................................................Subplots
 ax = plt.subplot(331)
 Cst = float(ni)*(float(ni)+1.)/4.
-plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
 #plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
 #plt.axvline(ToOMEGA, color=COLORS[2], linestyle='solid', linewidth=1.,label='$2 \Omega$')
 plt.title('n = '+str(ni))
 plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
+axes = plt.gca()
+#plt.gca().invert_xaxis()
 #.................................................Subplots
-ax1 = plt.subplot(332); ni = ni+stpn
+ax1 = plt.subplot(332); ni = nrange[1]#ni+stpn
 Cst = float(ni)*(float(ni)+1.)/4.
-plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
 #plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
 plt.title('n = '+str(ni))
+axes = plt.gca()
+#plt.gca().invert_xaxis()
 #.................................................Subplots
-ax1 = plt.subplot(333); ni = ni+stpn
+ax1 = plt.subplot(333); ni = nrange[2]#ni+stpn
 Cst = float(ni)*(float(ni)+1.)/4.
-plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
 #plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
 plt.title('n = '+str(ni))
+axes = plt.gca()
+#plt.gca().invert_xaxis()
 #.................................................Subplots
-ax1 = plt.subplot(334); ni = ni+stpn
+ax1 = plt.subplot(334); ni = nrange[3]#ni+stpn
 Cst = float(ni)*(float(ni)+1.)/4.
-plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
-plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
-#plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
-plt.title('n = '+str(ni))
-plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
-#.................................................Subplots
-ax1 = plt.subplot(335); ni = ni+stpn
-Cst = float(ni)*(float(ni)+1.)/4.
-plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
-plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
-#plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
-plt.title('n = '+str(ni))
-#.................................................Subplots
-ax1 = plt.subplot(336); ni = ni+stpn
-Cst = float(ni)*(float(ni)+1.)/4.
-plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
-plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
-#plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
-plt.title('n = '+str(ni))
-#.................................................Subplots
-ax1 = plt.subplot(337); ni = ni+stpn
-Cst = float(ni)*(float(ni)+1.)/4.
-plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
 #plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
 plt.title('n = '+str(ni))
 plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
-plt.xlabel(r'$\omega$', fontsize=13)
+axes = plt.gca()
+#plt.gca().invert_xaxis()
 #.................................................Subplots
-ax1 = plt.subplot(338); ni = ni+stpn
+ax1 = plt.subplot(335); ni = nrange[4]#ni+stpn
 Cst = float(ni)*(float(ni)+1.)/4.
-plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
 #plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
 plt.title('n = '+str(ni))
-plt.xlabel(r'$\omega$', fontsize=13)
+axes = plt.gca()
+#plt.gca().invert_xaxis()
 #.................................................Subplots
-ax1 = plt.subplot(339); ni = ni+stpn
+ax1 = plt.subplot(336); ni = nrange[5]#ni+stpn
 Cst = float(ni)*(float(ni)+1.)/4.
-plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
 #plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
 plt.title('n = '+str(ni))
-plt.xlabel(r'$\omega$', fontsize=13)
+axes = plt.gca()
+#plt.gca().invert_xaxis()
+#.................................................Subplots
+ax1 = plt.subplot(337); ni = nrange[6]#ni+stpn
+Cst = float(ni)*(float(ni)+1.)/4.
+plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
+#plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
+plt.title('n = '+str(ni))
+axes = plt.gca()
+#plt.gca().invert_xaxis()
+plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
+plt.xlabel(r'$\omega [rad.$s^{-1}$]$', fontsize=13)
+#.................................................Subplots
+ax1 = plt.subplot(338); ni = nrange[7]#ni+stpn
+Cst = float(ni)*(float(ni)+1.)/4.
+plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
+#plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
+plt.title('n = '+str(ni))
+axes = plt.gca()
+#plt.gca().invert_xaxis()
+plt.xlabel(r'$\omega [rad.$s^{-1}$]$', fontsize=13)
+#.................................................Subplots
+ax1 = plt.subplot(339); ni = nrange[8]#ni+stpn
+Cst = float(ni)*(float(ni)+1.)/4.
+plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
+#plt.axvline(omega_sat*np.pi*float(im)/(float(ni)**2.), color=COLORS[3], linestyle='solid', linewidth=1.)
+plt.title('n = '+str(ni))
+axes = plt.gca()
+#plt.gca().invert_xaxis()
+plt.xlabel(r'$\omega [rad.$s^{-1}$]$', fontsize=13)
 
 if(0==0):
 
-	ni=ini#im#im
+	ni= nrange[0]#ini#im#im
 	figA = plt.subplots()
 	#.................................................Subplots
 	ax = plt.subplot(331)	
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
 	plt.axvline(ToOMEGA, color=COLORS[2], linestyle='dashed', linewidth=1.)
 	plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
 	plt.title('n = '+str(ni))
 	axes = plt.gca()
-	axes.set_xlim([xmin,xmax])
+	if xlim==1:
+		axes.set_xlim([xmin,xmax])
+	#plt.gca().invert_xaxis()
 	#.................................................Subplots
-	ax1 = plt.subplot(332); ni = ni+stpn
+	ax1 = plt.subplot(332); ni = nrange[1]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni],color=COLORS[3], linestyle='dashed', linewidth=1.)
 	plt.title('n = '+str(ni))
 	axes = plt.gca()
-	axes.set_xlim([xmin,xmax])
+	if xlim==1:
+		axes.set_xlim([xmin,xmax])
+	#plt.gca().invert_xaxis()
 	#.................................................Subplots
-	ax1 = plt.subplot(333); ni = ni+stpn
+	ax1 = plt.subplot(333); ni = nrange[2]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
 	plt.title('n = '+str(ni))
 	axes = plt.gca()
-	axes.set_xlim([xmin,xmax])
+	if xlim==1:
+		axes.set_xlim([xmin,xmax])
+	#plt.gca().invert_xaxis()
 	#.................................................Subplots
-	ax1 = plt.subplot(334); ni = ni+stpn
+	ax1 = plt.subplot(334); ni = nrange[3]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
-	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
-	plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
-	plt.title('n = '+str(ni))
-	axes = plt.gca()
-	axes.set_xlim([xmin,xmax])
-	#.................................................Subplots
-	ax1 = plt.subplot(335); ni = ni+stpn
-	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
-	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
-	plt.title('n = '+str(ni))
-	axes = plt.gca()
-	axes.set_xlim([xmin,xmax])
-	#.................................................Subplots
-	ax1 = plt.subplot(336); ni = ni+stpn
-	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
-	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
-	plt.title('n = '+str(ni))
-	axes = plt.gca()
-	axes.set_xlim([xmin,xmax])
-	#.................................................Subplots
-	ax1 = plt.subplot(337); ni = ni+stpn
-	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
 	plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
 	plt.title('n = '+str(ni))
-	plt.xlabel(r'$\omega$', fontsize=13)
 	axes = plt.gca()
-	axes.set_xlim([xmin,xmax])
+	if xlim==1:
+		axes.set_xlim([xmin,xmax])
+	#plt.gca().invert_xaxis()
 	#.................................................Subplots
-	ax1 = plt.subplot(338); ni = ni+stpn
+	ax1 = plt.subplot(335); ni = nrange[4]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
 	plt.title('n = '+str(ni))
-	plt.xlabel(r'$\omega$', fontsize=13)
 	axes = plt.gca()
-	axes.set_xlim([xmin,xmax])
+	if xlim==1:
+		axes.set_xlim([xmin,xmax])
+	#plt.gca().invert_xaxis()
 	#.................................................Subplots
-	ax1 = plt.subplot(339); ni = ni+stpn
+	ax1 = plt.subplot(336); ni = nrange[5]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
 	plt.title('n = '+str(ni))
-	plt.xlabel(r'$\omega$', fontsize=13)
 	axes = plt.gca()
-	axes.set_xlim([xmin,xmax])
+	if xlim==1:
+		axes.set_xlim([xmin,xmax])
+	#plt.gca().invert_xaxis()
+	#.................................................Subplots
+	ax1 = plt.subplot(337); ni = nrange[6]#ni+stpn
+	Cst = float(ni)*(float(ni)+1.)/4.
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
+	plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
+	plt.title('n = '+str(ni))
+	plt.xlabel(r'$\omega$ [rad.$s^{-1}$]', fontsize=13)
+	axes = plt.gca()
+	if xlim==1:
+		axes.set_xlim([xmin,xmax])
+	#plt.gca().invert_xaxis()
+	#.................................................Subplots
+	ax1 = plt.subplot(338); ni = nrange[7]#ni+stpn
+	Cst = float(ni)*(float(ni)+1.)/4.
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
+	plt.title('n = '+str(ni))
+	plt.xlabel(r'$\omega$ [rad.$s^{-1}$]', fontsize=13)
+	axes = plt.gca()
+	if xlim==1:
+		axes.set_xlim([xmin,xmax])
+	#plt.gca().invert_xaxis()
+	#.................................................Subplots
+	ax1 = plt.subplot(339); ni = nrange[8]#ni+stpn
+	Cst = float(ni)*(float(ni)+1.)/4.
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.)
+	plt.title('n = '+str(ni))
+	plt.xlabel(r'$\omega$ [rad.$s^{-1}$]', fontsize=13)
+	axes = plt.gca()
+	if xlim==1:
+		axes.set_xlim([xmin,xmax])
+	#plt.gca().invert_xaxis()
 
 #
 if(0==0):
 
-	ni=ini#im#im
+	ni=nrange[0]#ini#im#im
 	figA = plt.subplots()
 	#.................................................Subplots
 	ax = plt.subplot(111)
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[0], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[0], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[0], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[1]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[1], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[2]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[2], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[2], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[2], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[3]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[3], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[3], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[4]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[4], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[4], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[4], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[5]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[5], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[5], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[5], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[6]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[6], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[6], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[6], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[7]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[7], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[7], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[7], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[8]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.semilogx(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[8], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.plot(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[8], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[8], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
 #	plt.axvline(omega_RHW[ni], color=COLORS[1], linestyle='dashed', linewidth=1.)
 	#plt.axvline(ToOMEGA, color=COLORS[2], linestyle='solid', linewidth=1.,label='$2 \Omega$')
 	plt.title('m = '+str(im))
 	ax.legend()
 	plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
-	plt.xlabel(r'$\omega$', fontsize=13)
-	#axes = plt.gca()
-	#axes.set_xlim([xmin,xmax])
+	plt.xlabel(r'$\omega$ [rad.$s^{-1}$]', fontsize=13)
+	axes = plt.gca()
+	if xlim==1:
+		axes.set_xlim([xmin,xmax])
+#	axes.invert_xaxis()
 
 if(0==0):
 
-	ni=ini#im#im
+	ni=nrange[0]#ini#im#im
 	figA = plt.subplots()
 	#.................................................Subplots
 	ax = plt.subplot(111)
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[0], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[0], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[0], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[1]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[1], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[1], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[2]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[2], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[2], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[2], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[3]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[3], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[3], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[3], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[4]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[4], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[4], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[4], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
-	ni = ni+stpn
+	ni = nrange[5]#ni+stpn
 	Cst = float(ni)*(float(ni)+1.)/4.
-	plt.loglog(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[5], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[5], linewidth=1.)#, alpha=ALPHAS	[il])
 	plt.axvline(omega_RHW[ni], color=COLORS[5], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
+	ni = nrange[6]#ni+stpn
+	Cst = float(ni)*(float(ni)+1.)/4.
+	plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[6], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.axvline(omega_RHW[ni], color=COLORS[6], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
+	ni = nrange[7]#ni+stpn
+	Cst = float(ni)*(float(ni)+1.)/4.
+	plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[7], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.axvline(omega_RHW[ni], color=COLORS[7], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
+	ni = nrange[8]#ni+stpn
+	Cst = float(ni)*(float(ni)+1.)/4.
+	plt.semilogy(w,Cst*np.mean(EFT[ni,:,:],1), '-', color=COLORS[8], linewidth=1.)#, alpha=ALPHAS	[il])
+	plt.axvline(omega_RHW[ni], color=COLORS[8], linestyle='dashed', linewidth=1.,label='n = '+str(ni))
 #	plt.axvline(omega_RHW[ni], color=COLORS[1], linestyle='dashed', linewidth=1.)
 	#plt.axvline(ToOMEGA, color=COLORS[2], linestyle='solid', linewidth=1.,label='$2 \Omega$')
 	plt.title('m = '+str(im))
 	ax.legend()
 	plt.ylabel(r'$<|\Psi^n_m(\omega)|^2 >$', fontsize=13)
-	plt.xlabel(r'$\omega$', fontsize=13)
-	#axes = plt.gca()
-	#axes.set_xlim([xmin,xmax])
+	plt.xlabel(r'$\omega$ [rad.$s^{-1}$]', fontsize=13)
+	axes = plt.gca()
+	if xlim==1:
+		axes.set_xlim([xmin,xmax])
+	#axes.invert_xaxis()
 plt.show(figA)	
